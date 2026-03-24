@@ -126,7 +126,7 @@
         #custom-cursor::after { content: ''; position: absolute; top: 50%; left: 50%; width: 4px; height: 4px; background: var(--primary-glow); border-radius: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.3s; }
         #custom-cursor.hovered::after { opacity: 1; }
 
-        @media (max-width: 768px) { h1 { font-size: 3rem; } p { font-size: 0.8rem; margin-bottom: 30px; letter-spacing: 0.05em; line-height: 1.5; } a.magnetic { padding: 12px 20px; font-size: 0.8rem; width: 100%; box-sizing: border-box; } .links-wrapper { gap: 12px; flex-direction: column; width: 100%; max-width: 250px; margin: 0 auto; } :root { --spotlight-size: 250px; } .hud-container { padding: 20px; } .hud-line { display: none; } }
+        @media (max-width: 768px) { h1 { font-size: 3rem; } p { font-size: 0.8rem; margin-bottom: 30px; letter-spacing: 0.05em; line-height: 1.5; } a.magnetic { padding: 12px 20px; font-size: 0.8rem; width: 100%; box-sizing: border-box; } .links-wrapper { gap: 12px; flex-direction: column; width: 100%; max-width: 250px; margin: 0 auto; } :root { --spotlight-size: 380px; } .hud-container { padding: 20px; } .hud-line { display: none; } }
     </style>
 </head>
 <body>
@@ -189,10 +189,10 @@
         if (window.DeviceOrientationEvent && window.matchMedia("(max-width: 768px)").matches) {
             window.addEventListener('deviceorientation', function(e) {
                 if (e.beta === null || e.gamma === null) return;
-                let x = (e.gamma / 45) * window.innerWidth + window.innerWidth / 2;
-                let y = ((e.beta - 45) / 45) * window.innerHeight + window.innerHeight / 2;
-                x = Math.max(0, Math.min(window.innerWidth, x));
-                y = Math.max(0, Math.min(window.innerHeight, y));
+                let x = (e.gamma / 20) * window.innerWidth + window.innerWidth / 2;
+                let y = ((e.beta - 50) / 20) * window.innerHeight + window.innerHeight / 2;
+                x = Math.max(-100, Math.min(window.innerWidth+100, x));
+                y = Math.max(-100, Math.min(window.innerHeight+100, y));
                 updateCursor(x, y);
             }, false);
         }
@@ -319,7 +319,7 @@
                 } else { this.color = this.baseColor; }
 
                 ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
-                ctx.fillStyle = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 0.5;
+                ctx.fillStyle = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = window.innerWidth < 768 ? 1.0 : 0.5;
                 if (this.type === 0) { ctx.beginPath(); ctx.arc(0, 0, this.size, 0, Math.PI * 2); ctx.fill(); } 
                 else if (this.type === 1) { ctx.beginPath(); ctx.moveTo(0, -this.size*1.5); ctx.lineTo(this.size*1.5, this.size*1.5); ctx.lineTo(-this.size*1.5, this.size*1.5); ctx.closePath(); ctx.stroke(); } 
                 else if (this.type === 2) { ctx.font = '10px "Space Mono"'; ctx.fillText(this.char, -4, 4); }
@@ -353,7 +353,7 @@
         }
 
         function initParticles() {
-            particlesArray = []; let divisor = window.innerWidth < 768 ? 5000 : 3500;
+            particlesArray = []; let divisor = window.innerWidth < 768 ? 3500 : 3500;
             let nParticles = Math.floor((canvas.width * canvas.height) / divisor);
             for (let i = 0; i < nParticles; i++) particlesArray.push(new Particle());
         }
@@ -370,7 +370,7 @@
                         particlesArray[a].vx += pushX; particlesArray[a].vy += pushY; particlesArray[b].vx -= pushX; particlesArray[b].vy -= pushY;
                     }
                     if (dist < 90) {
-                        let opacity = 1 - (dist / 90); ctx.strokeStyle = `rgba(200, 200, 200, ${opacity * 0.4})`; ctx.lineWidth = 0.5;
+                        let opacity = 1 - (dist / 90); ctx.strokeStyle = `rgba(200, 200, 200, ${opacity * 0.6})`; ctx.lineWidth = window.innerWidth < 768 ? 1.0 : 0.5;
                         ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
                     }
                 }
