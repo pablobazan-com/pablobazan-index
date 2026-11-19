@@ -1,606 +1,1905 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pablo Bazán | Creative Technologist</title>
-    <link rel="canonical" href="https://pablobazan.com/">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        /* ==========================================================================
-           SISTEMA INTEGRAL INDESTRUCTIBLE - PABLO BAZÁN v6.0 (LABORATORIO INTERACTIVO)
-           ========================================================================== */
-        :root {
-            --primary-glow: #00f3ff;
-            --secondary-glow: #ff00c1;
-            --bg-dark: #050505;
-            --card-bg: rgba(15, 15, 15, 0.75);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.5);
-            
-            --font-title: 'Syne', sans-serif;
-            --font-mono: 'Space Mono', monospace;
-            --font-body: 'Inter', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pablo Bazán — Ingeniería artística, Geometría Viva y Armonía</title>
+  <meta name="description" content="Portafolio de Pablo Bazán: convergencia entre ingeniería de sistemas, arte generativo, geometría viva y composición sonora." />
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; background-color: var(--bg-dark); }
-        body {
-            width: 100%; min-height: 100vh; font-family: var(--font-body); color: var(--text-main); overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(255, 0, 193, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px; background-attachment: fixed;
-        }
+  <!-- Google Fonts: Cormorant Garamond (Arte/Poesía), Space Grotesk (UI Moderna), JetBrains Mono (Ingeniería/Telemetría) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-        #art-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#07080c',
+            slateCard: '#0d1017',
+            gold: {
+              DEFAULT: '#d4af37',
+              light: '#e8c97a',
+              muted: 'rgba(212, 175, 55, 0.25)',
+            },
+            blueprint: {
+              line: 'rgba(148, 163, 184, 0.14)',
+              cyan: '#64b5f6',
+            },
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
 
-        .hud-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;
-            padding: 25px; display: flex; flex-direction: column; justify-content: space-between;
-            font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 2px; color: var(--text-muted);
-        }
-        .hud-top, .hud-bottom { display: flex; justify-content: space-between; }
-        .hud-accent { color: var(--primary-glow); font-weight: bold; }
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & ATMOSPHERE
+       ========================================================================== */
+    :root {
+      --bg-obsidian: #07080c;
+      --card-bg: rgba(15, 18, 28, 0.72);
+      --gold: #d4af37;
+      --gold-soft: #e8c97a;
+      --cyan: #64b5f6;
+      --grid-line: rgba(148, 163, 184, 0.08);
+      --border-subtle: rgba(148, 163, 184, 0.14);
+    }
 
-        .nav-capsule {
-            position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 2000;
-            background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color); border-radius: 50px; padding: 6px 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-        }
-        .nav-links { display: flex; gap: 8px; list-style: none; }
-        .nav-item {
-            font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
-            text-decoration: none; padding: 8px 16px; border-radius: 50px; transition: all 0.3s ease;
-        }
-        .nav-item:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+    * {
+      box-sizing: border-box;
+    }
 
-        .content-viewport { position: relative; z-index: 10; width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-        .web-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 140px 0 60px 0; }
+    html, body {
+      background-color: var(--bg-obsidian);
+      color: #e2e8f0;
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-        .hero-center { text-align: center; max-width: 850px; margin: 0 auto; }
-        .meta-tag { font-family: var(--font-mono); font-size: 0.75rem; color: var(--primary-glow); letter-spacing: 4px; margin-bottom: 20px; text-transform: uppercase; }
-        .pablo-brand-title {
-            font-family: var(--font-title); font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; line-height: 0.95;
-            letter-spacing: -2px; margin-bottom: 25px; text-transform: uppercase;
-            background: linear-gradient(180deg, var(--text-main) 50%, rgba(255,255,255,0.15)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .manifesto-text { font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.7; color: var(--text-muted); font-weight: 300; margin-bottom: 45px; }
+    /* Subtle Blueprint Coordinate Grid Background */
+    .blueprint-grid {
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      background-position: center top;
+    }
 
-        .button-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .action-btn {
-            display: inline-flex; align-items: center; justify-content: center; padding: 16px 36px;
-            font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;
-            text-decoration: none; text-transform: uppercase; border-radius: 50px; transition: all 0.3s ease; cursor: pointer; border: none;
-        }
-        .btn-solid { background: var(--text-main); color: var(--bg-dark); }
-        .btn-solid:hover { background: var(--primary-glow); box-shadow: 0 0 30px rgba(0, 243, 255, 0.4); }
-        .btn-outline { background: rgba(255, 255, 255, 0.02); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(10px); }
-        .btn-outline:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--text-main); }
+    /* Glassmorphic Engineering Card */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+    }
 
-        .section-title { font-family: var(--font-title); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 45px; text-transform: uppercase; }
-        .art-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 100%; }
+    .glass-card:hover {
+      border-color: rgba(212, 175, 55, 0.45);
+      box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8), 0 0 24px -8px rgba(212, 175, 55, 0.14);
+    }
 
-        .art-card {
-            position: relative; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px;
-            padding: 40px; overflow: hidden; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.1s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-            cursor: pointer; transform-style: preserve-3d; will-change: transform;
-        }
-        .art-card::before {
-            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 243, 255, 0.15), transparent 40%);
-            opacity: 0; transition: opacity 0.5s ease; z-index: 1; pointer-events: none;
-        }
-        .art-card:hover { border-color: rgba(0, 243, 255, 0.4); box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 30px rgba(0, 243, 255, 0.1); }
-        .art-card:hover::before { opacity: 1; }
-        .card-content { position: relative; z-index: 2; transform: translateZ(30px); pointer-events: none; }
-        .card-index { font-family: var(--font-mono); font-size: 0.75rem; color: var(--secondary-glow); font-weight: 700; margin-bottom: 20px; }
-        .art-card h3 { font-family: var(--font-title); font-size: 1.6rem; margin-bottom: 15px; letter-spacing: -0.5px; }
-        .art-card p { font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); font-weight: 300; }
+    /* Fluid Typography Helpers */
+    .hero-title {
+      font-size: clamp(2.75rem, 8vw, 6.25rem);
+      line-height: 0.96;
+      letter-spacing: 0.08em;
+    }
 
-        .linkedin-link-portal {
-            display: inline-flex; align-items: center; justify-content: center; gap: 15px; padding: 22px 45px;
-            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 50px;
-            color: var(--text-main); font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700;
-            letter-spacing: 2px; text-decoration: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-top: 10px;
-        }
-        .linkedin-link-portal:hover { background: var(--text-main); color: var(--bg-dark); box-shadow: 0 20px 50px rgba(255, 255, 255, 0.2); transform: translateY(-3px); }
+    .section-title {
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      line-height: 1.08;
+    }
 
-        /* ==========================================================================
-           MODAL DE PROYECTO INMERSIVO Y ENTORNO AISLADO
-           ========================================================================== */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 4, 4, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            z-index: 9999; display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    /* Custom Precision Range Sliders */
+    input[type="range"].precision-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 2px;
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 999px;
+      outline: none;
+    }
 
-        .modal-box {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px;
-            padding: 50px; max-width: 650px; width: 90%; max-height: 90vh; overflow-y: auto;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8); transform: translateY(20px) scale(0.95);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
-        }
-        .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+    input[type="range"].precision-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      border: 2px solid #07080c;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.65);
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
 
-        .modal-close {
-            position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color); color: var(--text-main); width: 40px; height: 40px;
-            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s ease; z-index: 10;
-        }
-        .modal-close:hover { background: var(--text-main); color: var(--bg-dark); transform: rotate(90deg); }
+    input[type="range"].precision-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+      background: #fff3cc;
+    }
 
-        #modal-info-view { transition: opacity 0.3s ease; }
-        #modal-demo-view { display: none; flex-direction: column; align-items: center; gap: 15px; animation: fadeIn 0.5s ease forwards; }
-        
-        .demo-canvas-container {
-            width: 100%; height: 350px; background: #000; border-radius: 16px; border: 1px solid var(--border-color);
-            overflow: hidden; position: relative; box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
-        }
-        #isolated-canvas { width: 100%; height: 100%; display: block; }
-        
-        /* NUEVO: ESTILOS PARA LOS DESLIZADORES RESPONSIVES */
-        .demo-controls { width: 100%; display: flex; flex-direction: column; gap: 15px; margin-top: 5px; }
-        .slider-group { display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
-        
-        .slider-group input[type=range] {
-            -webkit-appearance: none; width: 100%; background: transparent;
-        }
-        .slider-group input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%;
-            background: var(--primary-glow); cursor: pointer; margin-top: -8px; box-shadow: 0 0 10px var(--primary-glow);
-        }
-        .slider-group input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.15); border-radius: 2px;
-        }
+    input[type="range"].precision-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      border: 2px solid #07080c;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.65);
+      cursor: pointer;
+    }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* Harmonic Node Ripple Animation */
+    @keyframes harmonicRipple {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.85;
+      }
+      100% {
+        transform: scale(1.65);
+        opacity: 0;
+      }
+    }
 
-        @media (max-width: 768px) {
-            .hud-overlay { display: none; }
-            .nav-capsule { width: calc(100% - 32px); max-width: 360px; }
-            .nav-item { padding: 8px 12px; font-size: 0.65rem; letter-spacing: 1px; }
-            .web-section { padding: 110px 0 40px 0; }
-            .art-grid { gap: 20px; }
-            .art-card { padding: 30px 24px; }
-            .linkedin-link-portal { width: 100%; padding: 18px 24px; font-size: 0.75rem; }
-            .modal-box { padding: 40px 20px 20px 20px; }
-            .demo-canvas-container { height: 250px; }
-            .slider-group input[type=range]::-webkit-slider-thumb { height: 24px; width: 24px; margin-top: -10px; } /* Más grande para dedos en móvil */
-        }
-    </style>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  "mainEntity": {
-    "@type": "Person",
-    "name": "Pablo Bazán",
-    "jobTitle": "Creative Technologist & Automation Engineer",
-    "url": "https://pablobazan.com/",
-    "knowsAbout": ["Arte Generativo", "Laboratorios Gráficos", "Geometría Sagrada", "WebGL", "Creative Coding"],
-    "sameAs": [
-      "https://www.linkedin.com/in/pablobazan/"
-    ]
-  }
-}
-</script>
+    .node-ripple {
+      animation: harmonicRipple 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Slow Sacred Geometry Rotation */
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .spin-sacred {
+      animation: slowSpin 120s linear infinite;
+    }
+
+    /* Subtle Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #07080c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.3);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(212, 175, 55, 0.55);
+    }
+  </style>
 </head>
-<body>
+<body class="blueprint-grid relative selection:bg-gold/30 selection:text-gold-light">
 
-    <canvas id="art-canvas"></canvas>
+  <!-- Decorative Golden Crosshair Markers (Subtle Blueprint Precision) -->
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-40">
+    <span class="absolute top-24 left-6 font-mono text-[10px] text-gold/50">+</span>
+    <span class="absolute top-24 right-6 font-mono text-[10px] text-gold/50">+</span>
+    <span class="absolute bottom-8 left-6 font-mono text-[10px] text-blueprint-cyan/40">+</span>
+    <span class="absolute bottom-8 right-6 font-mono text-[10px] text-blueprint-cyan/40">+</span>
+  </div>
 
-    <div class="hud-overlay">
-        <div class="hud-top">
-            <span><span class="hud-accent">//</span> PABLO BAZÁN : CORE_SYSTEM</span>
-            <span>STATUS: ONLINE</span>
+  <!-- ========================================================================
+       1. RESPONSIVE STICKY HEADER
+       ======================================================================== -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 border-b border-white/5 bg-obsidian/75 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+      <!-- Brand + Live Telemetry Badge -->
+      <a href="#inicio" class="flex items-center gap-3 group focus:outline-none">
+        <!-- Subtle Vesica Piscis / Golden Circle Emblem -->
+        <svg class="w-8 h-8 text-gold transition-transform duration-700 group-hover:rotate-90" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <circle cx="16" cy="20" r="11" stroke="currentColor" stroke-width="1" stroke-opacity="0.75" />
+          <circle cx="24" cy="20" r="11" stroke="#64b5f6" stroke-width="1" stroke-opacity="0.55" />
+          <circle cx="20" cy="20" r="2" fill="currentColor" />
+        </svg>
+        <div class="flex flex-col">
+          <span class="font-serif text-lg sm:text-xl tracking-[0.2em] text-slate-100 leading-none">PABLO BAZÁN</span>
+          <span class="font-mono text-[10px] tracking-wider text-gold/80 mt-1 hidden sm:inline-flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
+            Φ 1.618 · 432 Hz · SYS: HARMONIC
+          </span>
         </div>
-        <div class="hud-bottom">
-            <span>CORE_PRJ // RETINA DISPLAY</span>
-            <span>© 2026</span>
-        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-8" aria-label="Navegación principal">
+        <a href="#inicio" class="text-xs uppercase tracking-[0.2em] text-slate-300 hover:text-gold-light transition-colors">Inicio</a>
+        <a href="#laboratorio" class="text-xs uppercase tracking-[0.2em] text-slate-300 hover:text-gold-light transition-colors">Laboratorio</a>
+        <a href="#contrapunto" class="text-xs uppercase tracking-[0.2em] text-slate-300 hover:text-gold-light transition-colors">Contrapunto</a>
+        <a href="#conexion" class="text-xs uppercase tracking-[0.2em] text-slate-300 hover:text-gold-light transition-colors">Conexión</a>
+      </nav>
+
+      <!-- Audio Toggle & Mobile Menu Button -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button
+          id="sound-toggle-btn"
+          type="button"
+          aria-label="Activar o silenciar sonido armónico"
+          class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-white/[0.03] hover:border-gold/50 text-xs font-mono text-slate-300 hover:text-gold-light transition-all cursor-pointer"
+        >
+          <span id="sound-icon-on" class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M11 5L6 9H2v6h4l5 4V5z" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+            <span class="hidden sm:inline">432 Hz</span>
+          </span>
+          <span id="sound-icon-off" class="hidden items-center gap-1.5 text-slate-500">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M11 5L6 9H2v6h4l5 4V5z" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+            <span class="hidden sm:inline">MUTE</span>
+          </span>
+        </button>
+
+        <!-- Hamburger Button (Mobile / Tablet) -->
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          aria-label="Abrir menú de navegación"
+          aria-expanded="false"
+          class="md:hidden p-2.5 rounded-lg border border-white/10 bg-white/[0.03] text-slate-200 hover:border-gold/50 transition-colors cursor-pointer"
+        >
+          <svg id="menu-open-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <line x1="4" y1="7" x2="20" y2="7" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="17" x2="14" y2="17" />
+          </svg>
+          <svg id="menu-close-icon" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <nav class="nav-capsule">
-        <ul class="nav-links">
-            <li><a href="#inicio" class="nav-item">INICIO</a></li>
-            <li><a href="#arte" class="nav-item">EXPOSICIÓN</a></li>
-            <li><a href="#conexion" class="nav-item">CONEXIÓN</a></li>
-        </ul>
-    </nav>
+    <!-- Mobile Drawer -->
+    <div id="mobile-drawer" class="md:hidden hidden border-t border-white/10 bg-obsidian/95 backdrop-blur-2xl">
+      <nav class="px-6 py-6 flex flex-col gap-4" aria-label="Navegación móvil">
+        <div class="font-mono text-[10px] tracking-widest text-gold/80 pb-2 border-b border-white/5 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
+          Φ 1.618 · 432 Hz · SYS: HARMONIC
+        </div>
+        <a href="#inicio" class="mobile-nav-link py-2 text-sm uppercase tracking-[0.22em] text-slate-200 hover:text-gold-light">00 // Inicio</a>
+        <a href="#laboratorio" class="mobile-nav-link py-2 text-sm uppercase tracking-[0.22em] text-slate-200 hover:text-gold-light">01–03 // Laboratorio</a>
+        <a href="#contrapunto" class="mobile-nav-link py-2 text-sm uppercase tracking-[0.22em] text-slate-200 hover:text-gold-light">04 // Contrapunto</a>
+        <a href="#conexion" class="mobile-nav-link py-2 text-sm uppercase tracking-[0.22em] text-slate-200 hover:text-gold-light">05 // Conexión</a>
+      </nav>
+    </div>
+  </header>
 
-    <main class="content-viewport">
-        <section id="inicio" class="web-section">
-            <div class="hero-center">
-                <div class="meta-tag">[ LAB_SYS_ACTIVE ]</div>
-                <h1 class="pablo-brand-title">PABLO BAZÁN</h1>
-                <p class="manifesto-text">
-                    Explorando la colisión armónica entre la automatización industrial, el código matemático y el diseño visual interactivo. Modelando experiencias web estables de alto impacto visual.
-                </p>
-                <div class="button-group">
-                    <a href="#arte" class="action-btn btn-solid">VER EXPOSICIÓN</a>
-                    <a href="#conexion" class="action-btn btn-outline">CONTACTO</a>
-                </div>
+  <main class="relative z-10">
+
+    <!-- ======================================================================
+         2. HERO SECTION (Interactive 3D Golden-Ratio Torus & Sacred Lattice)
+         ====================================================================== -->
+    <section id="inicio" class="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-20">
+      <!-- Interactive Full-Viewport Canvas -->
+      <canvas id="hero-canvas" class="absolute inset-0 w-full h-full block"></canvas>
+
+      <!-- Radial Vignette for Text Legibility -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(7,8,12,0.22)_0%,rgba(7,8,12,0.82)_72%,rgba(7,8,12,0.97)_100%)]"></div>
+
+      <!-- Hero Content -->
+      <div class="relative z-10 max-w-4xl mx-auto px-5 sm:px-8 text-center py-12">
+        <!-- Editorial Engineering Tag -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-gold/30 bg-obsidian/60 backdrop-blur-md mb-8">
+          <span class="w-1.5 h-1.5 rounded-full bg-blueprint-cyan"></span>
+          <span class="font-mono text-[11px] sm:text-xs tracking-[0.18em] text-gold-light uppercase">
+            [ 00 // ARQUITECTURA DEL CÓDIGO Y LA ARMONÍA ]
+          </span>
+        </div>
+
+        <!-- Poetic Serif Main Title with Subtle Engineering Framing -->
+        <div class="relative inline-block">
+          <span aria-hidden="true" class="hidden sm:block absolute -top-3 -left-6 w-4 h-4 border-t border-l border-gold/40"></span>
+          <span aria-hidden="true" class="hidden sm:block absolute -bottom-3 -right-6 w-4 h-4 border-b border-r border-blueprint-cyan/40"></span>
+          <h1 class="hero-title font-serif font-light text-slate-100 tracking-[0.12em]">
+            PABLO <span class="italic text-gold-light">BAZÁN</span>
+          </h1>
+        </div>
+
+        <!-- Subtitle -->
+        <p class="mt-7 max-w-2xl mx-auto text-base sm:text-lg text-slate-300/90 font-light leading-relaxed">
+          Explorando la convergencia entre la <span class="text-slate-100 font-normal">ingeniería de sistemas</span>, la
+          <span class="text-gold-light font-normal">geometría viva</span> y la <span class="text-blueprint-cyan font-normal">composición sonora</span>.
+          Código preciso al servicio de lo invisible.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href="#laboratorio"
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold to-gold-light text-obsidian font-medium text-sm tracking-[0.14em] uppercase shadow-[0_0_28px_rgba(212,175,55,0.28)] hover:shadow-[0_0_40px_rgba(212,175,55,0.48)] hover:-translate-y-0.5 transition-all"
+          >
+            Explorar Laboratorio
+          </a>
+          <button
+            id="hero-harmony-btn"
+            type="button"
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-gold/40 bg-obsidian/65 backdrop-blur-md text-gold-light font-mono text-xs sm:text-sm tracking-[0.14em] uppercase hover:bg-gold/10 hover:border-gold-light hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="9" stroke-opacity="0.5" />
+              <polygon points="10,8.5 16,12 10,15.5" fill="currentColor" stroke="none" />
+            </svg>
+            Escuchar Armonía
+          </button>
+        </div>
+
+        <!-- Subtle Esoteric / Engineering Telemetry Strip -->
+        <div class="mt-14 pt-6 border-t border-white/10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-[11px] text-slate-400/80">
+          <span>Φ = 1.6180339</span>
+          <span class="text-gold/40">·</span>
+          <span>137.508° PHYLLOTAXIS</span>
+          <span class="text-gold/40">·</span>
+          <span>A = 432 Hz · JUST INTONATION</span>
+        </div>
+      </div>
+
+      <!-- Subtle Scroll Cue -->
+      <a href="#laboratorio" aria-label="Desplazar hacia el laboratorio" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400 hover:text-gold-light transition-colors">
+        <span class="font-mono text-[9px] tracking-[0.25em] uppercase">Scroll</span>
+        <span class="w-px h-7 bg-gradient-to-b from-gold/70 to-transparent"></span>
+      </a>
+    </section>
+
+    <!-- ======================================================================
+         3. INTERACTIVE EXHIBITION SECTION (LABORATORIO DE RESONANCIA)
+         ====================================================================== -->
+    <section id="laboratorio" class="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <!-- Subtle Sacred Geometry Watermark -->
+      <svg aria-hidden="true" class="pointer-events-none absolute -top-10 right-0 w-72 h-72 sm:w-96 sm:h-96 text-gold/[0.04] spin-sacred" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="40" stroke="currentColor" stroke-width="0.8" />
+        <circle cx="100" cy="60" r="40" stroke="currentColor" stroke-width="0.8" />
+        <circle cx="100" cy="140" r="40" stroke="currentColor" stroke-width="0.8" />
+        <circle cx="65.36" cy="80" r="40" stroke="currentColor" stroke-width="0.8" />
+        <circle cx="134.64" cy="80" r="40" stroke="currentColor" stroke-width="0.8" />
+        <circle cx="65.36" cy="120" r="40" stroke="currentColor" stroke-width="0.8" />
+        <circle cx="134.64" cy="120" r="40" stroke="currentColor" stroke-width="0.8" />
+        <circle cx="100" cy="100" r="82" stroke="currentColor" stroke-width="0.6" stroke-dasharray="3 4" />
+      </svg>
+
+      <!-- Section Heading -->
+      <div class="max-w-3xl mb-14 sm:mb-16">
+        <p class="font-mono text-xs tracking-[0.2em] text-gold uppercase mb-3">
+          [ 01–03 // LABORATORIO DE RESONANCIA ]
+        </p>
+        <h2 class="section-title font-serif font-light text-slate-100">
+          El Arte del <span class="italic text-gold-light">Código</span>
+        </h2>
+        <p class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
+          Tres estudios interactivos en tiempo real donde las leyes de la matemática, la acústica y la topología espacial cobran forma visual y sonora. Selecciona cualquier estudio para abrir el entorno completo de experimentación.
+        </p>
+      </div>
+
+      <!-- 3 Responsive Exhibition Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+
+        <!-- CARD 01: GEOMETRÍA -->
+        <article
+          data-lab="geometria"
+          tabindex="0"
+          role="button"
+          aria-label="Abrir laboratorio 01 Geometría: Semilla Áurea y Flujo"
+          class="lab-card glass-card rounded-2xl overflow-hidden flex flex-col cursor-pointer group focus:outline-none focus:ring-2 focus:ring-gold/60"
+        >
+          <div class="relative h-56 sm:h-60 w-full bg-obsidian/90 border-b border-white/5 overflow-hidden">
+            <canvas id="preview-geometria" class="w-full h-full block"></canvas>
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/80 backdrop-blur-md border border-gold/25 font-mono text-[10px] text-gold-light tracking-wider">
+              01 // GEOMETRÍA
             </div>
-        </section>
-
-        <section id="arte" class="web-section">
-            <div class="meta-tag">[ EXHIBITION_PORTAL ]</div>
-            <h2 class="section-title">EL ARTE DEL CÓDIGO</h2>
-            
-            <div class="art-grid">
-                <article class="art-card" data-id="1">
-                    <div class="card-content">
-                        <div class="card-index">01 // GEOMETRÍA</div>
-                        <h3>Lienzo Algorítmico</h3>
-                        <p>Cálculo de matrices de flujos dinámicos basados en campos vectoriales numéricos. Arte abstracto autogenerado directamente en el núcleo de procesamiento web.</p>
-                    </div>
-                </article>
-
-                <article class="art-card" data-id="2">
-                    <div class="card-content">
-                        <div class="card-index">02 // SINESTESIA</div>
-                        <h3>Frecuencias Lumínicas</h3>
-                        <p>Alineación de señales acústicas y procesamiento de transformadas de Fourier para dar volumen y movimiento matemático a estructuras vectoriales tridimensionales.</p>
-                    </div>
-                </article>
-
-                <article class="art-card" data-id="3">
-                    <div class="card-content">
-                        <div class="card-index">03 // ESPACIO</div>
-                        <h3>Topografías Isométricas</h3>
-                        <p>Deformaciones geométricas controladas por shaders fluidos en paralelo que juegan con la luz y la perspectiva sin comprometer el rendimiento.</p>
-                    </div>
-                </article>
+            <div class="absolute bottom-3 right-3 font-mono text-[10px] text-slate-400 bg-obsidian/70 px-2 py-0.5 rounded">
+              θ = 137.508°
             </div>
-        </section>
-
-<section id="conexion" class="web-section">
-            <div class="hero-center">
-                <div class="meta-tag">[ SECURE_CHANNEL ]</div>
-                <h2 class="section-title">PABLO BAZÁN</h2>
-                <p class="manifesto-text">
-                    ¿Apasionado por la intersección entre el código puro y la belleza visual? Siempre estoy abierto a charlar sobre arte generativo, arte intrínseco en la geometría y los últimos avances tecnológicos. Conecta conmigo y compartamos hallazgos.
-                </p>
-                
-                <a href="https://www.linkedin.com/in/pablobazan/" target="_blank" rel="noopener noreferrer" class="linkedin-link-portal">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
-                    <span>ESTABLECER CONEXIÓN EN LINKEDIN</span>
-                </a>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-serif text-2xl text-slate-100 group-hover:text-gold-light transition-colors">
+                Semilla Áurea &amp; Flujo
+              </h3>
+              <p class="mt-2.5 text-sm text-slate-400 leading-relaxed">
+                Espiral de filotaxis basada en la proporción áurea (Φ) acoplada a un campo vectorial dinámico. Crecimiento orgánico emergiendo de ecuaciones puras.
+              </p>
             </div>
-        </section>
-    </main>
+            <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[11px]">
+              <span class="text-blueprint-cyan/90">FIBONACCI · VECTOR FIELD</span>
+              <span class="text-gold-light flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                Abrir Lab
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+        </article>
 
-    <div id="project-modal" class="modal-overlay">
-        <div class="modal-box">
-            <button class="modal-close" id="close-modal" aria-label="Cerrar modal">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
+        <!-- CARD 02: SINESTESIA -->
+        <article
+          data-lab="sinestesia"
+          tabindex="0"
+          role="button"
+          aria-label="Abrir laboratorio 02 Sinestesia: Cymatics y Frecuencias"
+          class="lab-card glass-card rounded-2xl overflow-hidden flex flex-col cursor-pointer group focus:outline-none focus:ring-2 focus:ring-gold/60"
+        >
+          <div class="relative h-56 sm:h-60 w-full bg-obsidian/90 border-b border-white/5 overflow-hidden">
+            <canvas id="preview-sinestesia" class="w-full h-full block"></canvas>
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/80 backdrop-blur-md border border-gold/25 font-mono text-[10px] text-gold-light tracking-wider">
+              02 // SINESTESIA
+            </div>
+            <div class="absolute bottom-3 right-3 font-mono text-[10px] text-slate-400 bg-obsidian/70 px-2 py-0.5 rounded">
+              432 Hz · 528 Hz
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-serif text-2xl text-slate-100 group-hover:text-gold-light transition-colors">
+                Cymatics &amp; Frecuencias
+              </h3>
+              <p class="mt-2.5 text-sm text-slate-400 leading-relaxed">
+                Interferencia de ondas estacionarias (figuras de Chladni y Lissajous) enlazadas en tiempo real a un sintetizador armónico Web Audio.
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[11px]">
+              <span class="text-blueprint-cyan/90">CHLADNI · WEB AUDIO</span>
+              <span class="text-gold-light flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                Abrir Lab
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 03: ESPACIO -->
+        <article
+          data-lab="espacio"
+          tabindex="0"
+          role="button"
+          aria-label="Abrir laboratorio 03 Espacio: Topografía del Toroide"
+          class="lab-card glass-card rounded-2xl overflow-hidden flex flex-col cursor-pointer group focus:outline-none focus:ring-2 focus:ring-gold/60"
+        >
+          <div class="relative h-56 sm:h-60 w-full bg-obsidian/90 border-b border-white/5 overflow-hidden">
+            <canvas id="preview-espacio" class="w-full h-full block"></canvas>
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/80 backdrop-blur-md border border-gold/25 font-mono text-[10px] text-gold-light tracking-wider">
+              03 // ESPACIO
+            </div>
+            <div class="absolute bottom-3 right-3 font-mono text-[10px] text-slate-400 bg-obsidian/70 px-2 py-0.5 rounded">
+              TORUS · 3D MESH
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-serif text-2xl text-slate-100 group-hover:text-gold-light transition-colors">
+                Topografía del Toroide
+              </h3>
+              <p class="mt-2.5 text-sm text-slate-400 leading-relaxed">
+                Campo toroidal tridimensional en rotación continua con modulaciones armónicas radiales. Explora su perspectiva arrastrando con ratón o tacto.
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[11px]">
+              <span class="text-blueprint-cyan/90">3D PROJECTION · FLOW</span>
+              <span class="text-gold-light flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                Abrir Lab
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. MUSIC & PHILOSOPHY SECTION (CONTRAPUNTO + SERIE ARMÓNICA)
+         ====================================================================== -->
+    <section id="contrapunto" class="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 border-t border-white/5 bg-gradient-to-b from-transparent via-[#0a0d14]/70 to-transparent">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+
+        <!-- Left Column: Poetic Philosophy & Engineering Ethos -->
+        <div class="lg:col-span-5 space-y-6">
+          <p class="font-mono text-xs tracking-[0.2em] text-gold uppercase">
+            [ 04 // CONTRAPUNTO ]
+          </p>
+          <h2 class="section-title font-serif font-light text-slate-100">
+            Música, Código y <span class="italic text-gold-light">Proporción</span>
+          </h2>
+
+          <blockquote class="pl-5 border-l-2 border-gold/60 font-serif italic text-xl sm:text-2xl text-gold-light/95 leading-snug">
+            «Toda arquitectura es música congelada; todo algoritmo, una partitura en silencio.»
+          </blockquote>
+
+          <p class="text-sm sm:text-base text-slate-400 leading-relaxed">
+            Desde Pitágoras hasta la computación moderna, la ingeniería y la música comparten la misma raíz: relaciones numéricas exactas capaces de despertar emoción. Una quinta justa (<span class="font-mono text-slate-200">3:2</span>), una espiral áurea (<span class="font-mono text-slate-200">Φ</span>) o un bucle de control industrial bien afinado obedecen a la misma búsqueda de resonancia.
+          </p>
+
+          <div class="grid grid-cols-2 gap-4 pt-2">
+            <div class="p-4 rounded-xl border border-white/10 bg-white/[0.02]">
+              <div class="font-mono text-[10px] text-blueprint-cyan uppercase tracking-widest">Afinación Natural</div>
+              <div class="font-serif text-2xl text-slate-100 mt-1">A = 432 Hz</div>
+              <div class="font-mono text-[10px] text-slate-500 mt-0.5">Just Intonation · 2:1 / 3:2</div>
+            </div>
+            <div class="p-4 rounded-xl border border-white/10 bg-white/[0.02]">
+              <div class="font-mono text-[10px] text-gold uppercase tracking-widest">Proporción Viva</div>
+              <div class="font-serif text-2xl text-slate-100 mt-1">Φ = 1.618</div>
+              <div class="font-mono text-[10px] text-slate-500 mt-0.5">1 · 1 · 2 · 3 · 5 · 8 · 13</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive "Serie Armónica" Playable Instrument -->
+        <div class="lg:col-span-7">
+          <div class="glass-card rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+            <!-- Header of the Instrument -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+              <div>
+                <div class="font-mono text-[10px] tracking-[0.2em] text-gold uppercase">INSTRUMENTO INTERACTIVO · SERIE ARMÓNICA</div>
+                <h3 class="font-serif text-2xl text-slate-100 mt-1">Resonador Pitagórico</h3>
+              </div>
+              <button
+                id="play-chord-btn"
+                type="button"
+                class="px-4 py-2.5 rounded-xl border border-gold/45 bg-gold/10 hover:bg-gold/20 text-gold-light font-mono text-xs tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18V5l12-2v13" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="16" r="3" />
                 </svg>
-            </button>
-            
-            <div id="modal-info-view">
-                <div class="meta-tag" id="modal-tag">MODAL_TAG</div>
-                <h2 class="section-title" id="modal-title" style="margin-bottom: 20px; font-size: 2.2rem;">Título</h2>
-                <p class="manifesto-text" id="modal-desc" style="margin-bottom: 30px; font-size: 1rem;">Descripción detallada.</p>
-                <button class="action-btn btn-solid" id="start-demo-btn" style="width: 100%;">INICIAR LABORATORIO INTERACTIVO</button>
+                Tocar Acorde
+              </button>
             </div>
 
-            <div id="modal-demo-view">
-                <div class="meta-tag" id="demo-tag" style="margin-bottom: 0;">[ EJECUTANDO ENTORNO ]</div>
-                <div class="demo-canvas-container">
-                    <canvas id="isolated-canvas"></canvas>
-                </div>
-                
-                <div class="demo-controls">
-                    <div class="slider-group">
-                        <label id="lbl-param1">PARÁMETRO 1</label>
-                        <input type="range" id="demo-slider-1" min="1" max="100" value="50">
-                    </div>
-                    <div class="slider-group">
-                        <label id="lbl-param2">PARÁMETRO 2</label>
-                        <input type="range" id="demo-slider-2" min="1" max="100" value="50">
-                    </div>
-                </div>
-
-                <button class="action-btn btn-outline" id="stop-demo-btn" style="width: 100%; padding: 12px;">CERRAR LABORATORIO</button>
+            <!-- Live Harmonic Wave Visualizer & Active Readout -->
+            <div class="mt-5 rounded-xl bg-obsidian/80 border border-white/5 p-4">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2 font-mono text-[11px]">
+                <span id="harmonic-active-name" class="text-gold-light">Pulsa un nodo para resonar</span>
+                <span id="harmonic-active-specs" class="text-blueprint-cyan">RATIO 1:1 · 216.0 Hz</span>
+              </div>
+              <canvas id="harmonic-wave-canvas" class="w-full h-20 block rounded"></canvas>
             </div>
+
+            <!-- 7 Resonant Golden-Ratio Nodes -->
+            <div id="harmonic-nodes-grid" class="mt-6 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3">
+              <!-- Populated dynamically via JS for clean event handling -->
+            </div>
+
+            <p class="mt-5 font-mono text-[10px] text-slate-500 text-center">
+              Toca o haz clic en cada nodo · Síntesis aditiva en tiempo real (Web Audio API) afinada a La = 432 Hz
+            </p>
+          </div>
         </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. CONNECTION SECTION (CANAL ABIERTO)
+         ====================================================================== -->
+    <section id="conexion" class="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 border-t border-white/5">
+      <div class="max-w-3xl mx-auto text-center">
+        <p class="font-mono text-xs tracking-[0.2em] text-gold uppercase mb-4">
+          [ 05 // CANAL ABIERTO ]
+        </p>
+        <h2 class="section-title font-serif font-light text-slate-100">
+          Construyamos en <span class="italic text-gold-light">Resonancia</span>
+        </h2>
+        <p class="mt-5 text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+          ¿Te apasiona la intersección entre la ingeniería de precisión, el arte generativo, la geometría y la música? Siempre estoy abierto a conversar, colaborar en proyectos singulares y compartir hallazgos.
+        </p>
+
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href="https://www.linkedin.com/in/pablobazan/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-light text-obsidian font-medium text-xs sm:text-sm tracking-[0.16em] uppercase shadow-[0_0_28px_rgba(212,175,55,0.25)] hover:shadow-[0_0_40px_rgba(212,175,55,0.45)] hover:-translate-y-0.5 transition-all inline-flex items-center justify-center gap-2.5"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+            </svg>
+            Conectar en LinkedIn
+          </a>
+
+          <button
+            id="copy-email-btn"
+            type="button"
+            class="w-full sm:w-auto px-7 py-4 rounded-xl border border-white/15 bg-white/[0.03] hover:border-gold/50 text-slate-200 hover:text-gold-light font-mono text-xs tracking-[0.14em] uppercase transition-all inline-flex items-center justify-center gap-2.5 cursor-pointer"
+          >
+            <svg class="w-4 h-4 text-gold/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="M22 6l-10 7L2 6" />
+            </svg>
+            Copiar Contacto
+          </button>
+        </div>
+
+        <!-- Inline Toast Message (Replaces alert) -->
+        <div id="copy-toast" role="status" aria-live="polite" class="mt-4 h-6 font-mono text-xs text-gold-light opacity-0 transition-opacity duration-300">
+          Dirección de contacto copiada: pbazan@gmail.com
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="relative z-10 border-t border-white/10 bg-obsidian/90 py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-slate-500">
+      <div>© 2026 Pablo Bazán</div>
+      <div class="tracking-[0.25em] text-gold/60">1 · 1 · 2 · 3 · 5 · 8 · 13 · 21</div>
+      <div class="text-slate-400">Diseñado en proporción <span class="text-gold-light">Φ</span></div>
     </div>
+  </footer>
 
-    <script>
-        // --- 1. MOTOR DE ARTE MATEMÁTICO DEL FONDO ---
-        const canvas = document.getElementById('art-canvas');
+  <!-- ========================================================================
+       INTERACTIVE LABORATORY MODAL (FULL-HEIGHT ADAPTABLE)
+       ======================================================================== -->
+  <div
+    id="lab-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-5 bg-obsidian/90 backdrop-blur-xl"
+  >
+    <div class="w-full max-w-6xl h-[94dvh] sm:h-[88dvh] rounded-2xl border border-gold/25 bg-[#0a0d14] shadow-2xl flex flex-col overflow-hidden">
+
+      <!-- Modal Header -->
+      <div class="px-4 sm:px-6 py-3.5 border-b border-white/10 flex items-center justify-between gap-3 bg-obsidian/80 shrink-0">
+        <div class="min-w-0">
+          <div id="modal-tag" class="font-mono text-[10px] tracking-[0.2em] text-gold uppercase truncate">
+            01 // GEOMETRÍA
+          </div>
+          <h3 id="modal-title" class="font-serif text-xl sm:text-2xl text-slate-100 truncate">
+            Semilla Áurea &amp; Flujo
+          </h3>
+        </div>
+        <button
+          id="close-modal-btn"
+          type="button"
+          class="px-3.5 py-2 rounded-lg border border-white/15 bg-white/[0.04] hover:border-gold/60 hover:text-gold-light font-mono text-[11px] uppercase tracking-wider text-slate-300 transition-colors shrink-0 cursor-pointer"
+        >
+          Cerrar Laboratorio [ESC]
+        </button>
+      </div>
+
+      <!-- Modal Body: Canvas + Engineering Controls -->
+      <div class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
+        <!-- Large Interactive Canvas Area -->
+        <div class="relative flex-1 min-h-[45%] lg:min-h-0 bg-obsidian overflow-hidden">
+          <canvas id="lab-main-canvas" class="w-full h-full block touch-none"></canvas>
+          <!-- Live Telemetry Overlay -->
+          <div id="lab-telemetry" class="pointer-events-none absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] sm:text-[11px]">
+            <span id="telemetry-left" class="px-2.5 py-1 rounded bg-obsidian/75 border border-white/10 text-gold-light backdrop-blur-md">
+              Φ = 1.6180339
+            </span>
+            <span id="telemetry-right" class="px-2.5 py-1 rounded bg-obsidian/75 border border-white/10 text-blueprint-cyan backdrop-blur-md">
+              60 FPS
+            </span>
+          </div>
+          <!-- Interaction Hint -->
+          <div id="lab-hint" class="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-obsidian/75 border border-white/10 font-mono text-[10px] text-slate-400 backdrop-blur-md whitespace-nowrap">
+            Interactúa arrastrando sobre el lienzo
+          </div>
+        </div>
+
+        <!-- Sidebar Controls (Scrollable on small screens) -->
+        <aside class="w-full lg:w-80 xl:w-96 border-t lg:border-t-0 lg:border-l border-white/10 bg-[#0d1017] p-4 sm:p-6 overflow-y-auto shrink-0 max-h-[46%] lg:max-h-none">
+          <p id="modal-description" class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-5 pb-4 border-b border-white/10">
+            Descripción del entorno experimental.
+          </p>
+          <!-- Dynamic Lab Controls Container -->
+          <div id="lab-controls-container" class="space-y-5"></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       APPLICATION SCRIPT (CANVAS ENGINES, WEB AUDIO SYNTH & UI STATE)
+       ======================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ======================================================================
+         1. CONSTANTS & GLOBAL STATE
+         ====================================================================== */
+      const PHI = 1.61803398875;
+      const GOLDEN_ANGLE = 137.507764;
+
+      const state = {
+        soundEnabled: true,
+        audioCtx: null,
+        masterGain: null,
+        activeLab: null,
+        // Lab 1: Geometría (Phyllotaxis & Vector Flow)
+        geo: {
+          angle: 137.508,
+          density: 360,
+          flowSpeed: 1.0,
+          pointerX: 0.5,
+          pointerY: 0.5,
+        },
+        // Lab 2: Sinestesia (Cymatics / Chladni & Web Audio Synth)
+        syn: {
+          baseFreq: 432,
+          m: 3,
+          n: 2,
+          playing: false,
+          osc1: null,
+          osc2: null,
+          gainNode: null,
+        },
+        // Lab 3: Espacio (3D Torus Field)
+        esp: {
+          torsion: 2.0,
+          amplitude: 0.24,
+          resolution: 30,
+          rotX: 0.55,
+          rotY: 0.4,
+          dragging: false,
+          lastX: 0,
+          lastY: 0,
+        },
+        // Hero interactive pulse & pointer
+        hero: {
+          pointerX: 0,
+          pointerY: 0,
+          targetX: 0,
+          targetY: 0,
+          pulse: 0,
+        },
+        // Harmonic Instrument Wave Display
+        harmonicWave: {
+          freqRatio: 1,
+          energy: 0.08,
+          phase: 0,
+        },
+      };
+
+      /* ======================================================================
+         2. WEB AUDIO ENGINE (432 Hz JUST INTONATION & HARMONIC SYNTH)
+         ====================================================================== */
+      function ensureAudioContext() {
+        try {
+          if (!state.audioCtx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return null;
+            state.audioCtx = new AudioCtx();
+            state.masterGain = state.audioCtx.createGain();
+            state.masterGain.gain.value = state.soundEnabled ? 0.65 : 0;
+            state.masterGain.connect(state.audioCtx.destination);
+          }
+          if (state.audioCtx.state === 'suspended') {
+            state.audioCtx.resume();
+          }
+          return state.audioCtx;
+        } catch (err) {
+          console.warn('Web Audio API no disponible:', err);
+          return null;
+        }
+      }
+
+      /**
+       * Plays a warm, lush bell/electric-piano-like harmonic note.
+       */
+      function playHarmonicTone(freq, duration = 2.4, volume = 0.22) {
+        if (!state.soundEnabled) return;
+        const ctx = ensureAudioContext();
+        if (!ctx || !state.masterGain) return;
+
+        try {
+          const now = ctx.currentTime;
+          const noteGain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(Math.min(freq * 4.5, 4200), now);
+          filter.frequency.exponentialRampToValueAtTime(Math.max(freq * 1.4, 400), now + duration);
+
+          // Fundamental + gentle 2nd & 3rd overtones
+          const partials = [
+            { mult: 1, amp: 1.0, type: 'sine' },
+            { mult: 2, amp: 0.28, type: 'triangle' },
+            { mult: 3, amp: 0.09, type: 'sine' },
+          ];
+
+          noteGain.gain.setValueAtTime(0.0001, now);
+          noteGain.gain.linearRampToValueAtTime(volume, now + 0.035);
+          noteGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          filter.connect(noteGain);
+          noteGain.connect(state.masterGain);
+
+          partials.forEach((p) => {
+            const osc = ctx.createOscillator();
+            const pGain = ctx.createGain();
+            osc.type = p.type;
+            osc.frequency.setValueAtTime(freq * p.mult, now);
+            pGain.gain.value = p.amp;
+            osc.connect(pGain);
+            pGain.connect(filter);
+            osc.start(now);
+            osc.stop(now + duration + 0.05);
+          });
+        } catch (err) {
+          console.warn('Error al reproducir tono:', err);
+        }
+      }
+
+      /**
+       * Plays an ethereal 432Hz Just Intonation chord (A3, E4, A4, C#5, E5).
+       */
+      function playEtherealChord() {
+        if (!state.soundEnabled) {
+          // Automatically enable sound if user explicitly clicked "Escuchar Armonía"
+          setSoundEnabled(true);
+        }
+        const freqs = [216, 324, 432, 540, 648];
+        freqs.forEach((f, idx) => {
+          setTimeout(() => {
+            playHarmonicTone(f, 3.6, 0.14);
+          }, idx * 110);
+        });
+        state.hero.pulse = 1.0;
+      }
+
+      /**
+       * Continuous synth for Lab 2 (Sinestesia: Cymatics & Frecuencias)
+       */
+      function startSinestesiaSynth() {
+        if (!state.soundEnabled) setSoundEnabled(true);
+        const ctx = ensureAudioContext();
+        if (!ctx || !state.masterGain) return;
+        stopSinestesiaSynth();
+
+        try {
+          const now = ctx.currentTime;
+          const base = state.syn.baseFreq / 2; // Warm register (e.g. 216 Hz for 432 Hz)
+          const ratio = state.syn.m / Math.max(1, state.syn.n);
+          const secondFreq = Math.min(Math.max(base * ratio, 110), 1200);
+
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.linearRampToValueAtTime(0.16, now + 0.25);
+
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.value = 1800;
+
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          osc1.type = 'sine';
+          osc2.type = 'triangle';
+          osc1.frequency.setValueAtTime(base, now);
+          osc2.frequency.setValueAtTime(secondFreq, now);
+
+          osc1.connect(filter);
+          osc2.connect(filter);
+          filter.connect(gain);
+          gain.connect(state.masterGain);
+
+          osc1.start(now);
+          osc2.start(now);
+
+          state.syn.osc1 = osc1;
+          state.syn.osc2 = osc2;
+          state.syn.gainNode = gain;
+          state.syn.playing = true;
+        } catch (err) {
+          console.warn('Error al iniciar sintetizador:', err);
+        }
+      }
+
+      function updateSinestesiaSynth() {
+        if (!state.syn.playing || !state.audioCtx || !state.syn.osc1 || !state.syn.osc2) return;
+        try {
+          const now = state.audioCtx.currentTime;
+          const base = state.syn.baseFreq / 2;
+          const ratio = state.syn.m / Math.max(1, state.syn.n);
+          const secondFreq = Math.min(Math.max(base * ratio, 110), 1200);
+          state.syn.osc1.frequency.setTargetAtTime(base, now, 0.08);
+          state.syn.osc2.frequency.setTargetAtTime(secondFreq, now, 0.08);
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+
+      function stopSinestesiaSynth() {
+        try {
+          if (state.syn.gainNode && state.audioCtx) {
+            const now = state.audioCtx.currentTime;
+            state.syn.gainNode.gain.cancelScheduledValues(now);
+            state.syn.gainNode.gain.setTargetAtTime(0.0001, now, 0.05);
+          }
+          if (state.syn.osc1) {
+            state.syn.osc1.stop(state.audioCtx ? state.audioCtx.currentTime + 0.15 : 0);
+            state.syn.osc1 = null;
+          }
+          if (state.syn.osc2) {
+            state.syn.osc2.stop(state.audioCtx ? state.audioCtx.currentTime + 0.15 : 0);
+            state.syn.osc2 = null;
+          }
+          state.syn.gainNode = null;
+        } catch (err) {
+          // Ignore already stopped oscillators
+        }
+        state.syn.playing = false;
+      }
+
+      function setSoundEnabled(enabled) {
+        state.soundEnabled = enabled;
+        const onEl = document.getElementById('sound-icon-on');
+        const offEl = document.getElementById('sound-icon-off');
+        if (enabled) {
+          onEl.classList.remove('hidden');
+          onEl.classList.add('flex');
+          offEl.classList.add('hidden');
+          offEl.classList.remove('flex');
+        } else {
+          onEl.classList.add('hidden');
+          onEl.classList.remove('flex');
+          offEl.classList.remove('hidden');
+          offEl.classList.add('flex');
+          stopSinestesiaSynth();
+          updateSynthButtonUI();
+        }
+        if (state.masterGain && state.audioCtx) {
+          state.masterGain.gain.setTargetAtTime(enabled ? 0.65 : 0, state.audioCtx.currentTime, 0.05);
+        }
+      }
+
+      /* ======================================================================
+         3. HIGH-DPI CANVAS HELPER
+         ====================================================================== */
+      function resizeCanvasToDisplaySize(canvas) {
+        if (!canvas) return { width: 0, height: 0, dpr: 1 };
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.max(1, Math.floor(rect.width));
+        const h = Math.max(1, Math.floor(rect.height));
+        if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
+          canvas.width = Math.floor(w * dpr);
+          canvas.height = Math.floor(h * dpr);
+        }
         const ctx = canvas.getContext('2d');
-        let points = [];
-        let time = 0;
-        let mouse = { x: -1000, y: -1000, radius: 150 };
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { width: w, height: h, dpr, ctx };
+      }
 
-        window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-        window.addEventListener('mouseout', () => { mouse.x = -1000; mouse.y = -1000; });
-        window.addEventListener('touchmove', (e) => { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }, {passive: true});
+      /* ======================================================================
+         4. HERO CANVAS: BREATHING 3D GOLDEN-RATIO TORUS & SACRED LATTICE
+         ====================================================================== */
+      const heroCanvas = document.getElementById('hero-canvas');
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            initPoints();
+      function drawHero(time) {
+        const { width: w, height: h, ctx } = resizeCanvasToDisplaySize(heroCanvas);
+        if (!w || !h) return;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Smooth pointer easing
+        state.hero.pointerX += (state.hero.targetX - state.hero.pointerX) * 0.05;
+        state.hero.pointerY += (state.hero.targetY - state.hero.pointerY) * 0.05;
+        if (state.hero.pulse > 0.001) {
+          state.hero.pulse *= 0.975;
+        } else {
+          state.hero.pulse = 0;
         }
 
-        function initPoints() {
-            points = [];
-            const count = Math.min(Math.floor((canvas.width * canvas.height) / 12000), 100);
-            for(let i=0; i<count; i++) {
-                points.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 2 + 1, vx: 0, vy: 0 });
-            }
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const minDim = Math.min(w, h);
+        const breathe = 1 + Math.sin(time * 0.0008) * 0.045 + state.hero.pulse * 0.14;
+        const R = minDim * 0.255 * breathe;
+        const r = R / PHI; // Golden Ratio minor radius
+
+        // Expanding golden pulse ring when "Escuchar Armonía" is triggered
+        if (state.hero.pulse > 0.01) {
+          const ringRadius = minDim * (0.18 + (1 - state.hero.pulse) * 0.55);
+          ctx.beginPath();
+          ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(232, 201, 122, ${state.hero.pulse * 0.55})`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
         }
 
-        function animateCanvas() {
-            time += 0.005;
-            ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00f3ff'; ctx.strokeStyle = 'rgba(255, 0, 193, 0.15)'; ctx.lineWidth = 0.5;
+        // Subtle Sacred Geometry Outer Blueprint Circles
+        ctx.save();
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R + r * 0.85, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([3, 8]);
+        ctx.beginPath();
+        ctx.arc(cx, cy, (R + r * 0.85) * 1.18, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
 
-            points.forEach((p, idx) => {
-                const angle = Math.sin(p.x * 0.002 + time) * Math.cos(p.y * 0.002 + time) * Math.PI * 2;
-                p.vx += Math.cos(angle) * 0.05; p.vy += Math.sin(angle) * 0.05;
-                const dx = p.x - mouse.x; const dy = p.y - mouse.y; const dist = Math.hypot(dx, dy);
+        const rotY = time * 0.00022 + state.hero.pointerX * 0.65;
+        const rotX = 0.52 + Math.sin(time * 0.0003) * 0.12 + state.hero.pointerY * 0.45;
+        const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+        const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
 
-                if (dist < mouse.radius) {
-                    const force = (mouse.radius - dist) / mouse.radius;
-                    p.vx += (dx / dist) * force * 1.5; p.vy += (dy / dist) * force * 1.5;
-                }
-                p.vx *= 0.95; p.vy *= 0.95; p.x += p.vx; p.y += p.vy;
+        const rings = w < 640 ? 22 : 32;
+        const segs = w < 640 ? 14 : 20;
+        const fov = minDim * 1.35;
 
-                if(p.x < 0) p.x = canvas.width; if(p.x > canvas.width) p.x = 0;
-                if(p.y < 0) p.y = canvas.height; if(p.y > canvas.height) p.y = 0;
+        const project = (x, y, z) => {
+          // Rotate Y
+          const x1 = x * cosY - z * sinY;
+          const z1 = x * sinY + z * cosY;
+          // Rotate X
+          const y2 = y * cosX - z1 * sinX;
+          const z2 = y * sinX + z1 * cosX;
+          const scale = fov / (fov + z2 + R * 1.2);
+          return { x: cx + x1 * scale, y: cy + y2 * scale, z: z2, scale };
+        };
 
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
-
-                for(let j = idx + 1; j < points.length; j++) {
-                    const d2 = Math.hypot(p.x - points[j].x, p.y - points[j].y);
-                    if(d2 < 100) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(points[j].x, points[j].y); ctx.stroke(); }
-                }
-            });
-            requestAnimationFrame(animateCanvas);
+        // Draw Torus Meridians (Gold & Cyan Harmonic Strands)
+        for (let i = 0; i < rings; i++) {
+          const u = (i / rings) * Math.PI * 2;
+          const isGoldStrand = i % 3 === 0;
+          ctx.beginPath();
+          for (let j = 0; j <= segs; j++) {
+            const v = (j / segs) * Math.PI * 2 + time * 0.0004;
+            const wave = Math.sin(u * 3 + time * 0.0012) * (r * 0.08 * (1 + state.hero.pulse * 2));
+            const rr = r + wave;
+            const x = (R + rr * Math.cos(v)) * Math.cos(u);
+            const y = (R + rr * Math.cos(v)) * Math.sin(u);
+            const z = rr * Math.sin(v);
+            const p = project(x, y, z);
+            if (j === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.strokeStyle = isGoldStrand
+            ? `rgba(212, 175, 55, ${0.18 + state.hero.pulse * 0.25})`
+            : 'rgba(100, 181, 246, 0.09)';
+          ctx.lineWidth = isGoldStrand ? 1.1 : 0.75;
+          ctx.stroke();
         }
-        window.addEventListener('resize', resizeCanvas); resizeCanvas(); animateCanvas();
 
-        // --- 2. LÓGICA DEL MODAL Y ENTORNOS AISLADOS ---
-        const cards = document.querySelectorAll('.art-card');
-        const modal = document.getElementById('project-modal');
-        const infoView = document.getElementById('modal-info-view');
-        const demoView = document.getElementById('modal-demo-view');
-        const demoCanvas = document.getElementById('isolated-canvas');
-        const demoCtx = demoCanvas.getContext('2d');
-        
-        let currentCardId = null;
-        let demoAnimationReq = null;
-        let demoTime = 0;
+        // Golden Ratio Luminous Nodes on the Torus
+        for (let i = 0; i < rings; i += 2) {
+          const u = (i / rings) * Math.PI * 2;
+          const v = u * PHI + time * 0.00055;
+          const x = (R + r * Math.cos(v)) * Math.cos(u);
+          const y = (R + r * Math.cos(v)) * Math.sin(u);
+          const z = r * Math.sin(v);
+          const p = project(x, y, z);
+          const alpha = Math.max(0.12, Math.min(0.9, (p.scale - 0.55) * 1.6));
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, (1.6 + state.hero.pulse * 1.4) * p.scale, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(232, 201, 122, ${alpha})`;
+          ctx.fill();
+        }
+      }
 
-        // Variables Globales Controladas por los Sliders (0 a 100)
-        let param1 = 50;
-        let param2 = 50;
+      // Hero Pointer & Touch Listeners
+      window.addEventListener('mousemove', (e) => {
+        state.hero.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+        state.hero.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      }, { passive: true });
 
-        const slider1 = document.getElementById('demo-slider-1');
-        const slider2 = document.getElementById('demo-slider-2');
-        const lbl1 = document.getElementById('lbl-param1');
-        const lbl2 = document.getElementById('lbl-param2');
+      window.addEventListener('touchmove', (e) => {
+        if (state.activeLab) return;
+        if (e.touches && e.touches[0]) {
+          state.hero.targetX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+          state.hero.targetY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+        }
+      }, { passive: true });
 
-        slider1.addEventListener('input', (e) => param1 = parseInt(e.target.value));
-        slider2.addEventListener('input', (e) => param2 = parseInt(e.target.value));
+      /* ======================================================================
+         5. SHARED LAB RENDERERS (USED FOR BOTH CARD PREVIEWS & FULL MODAL)
+         ====================================================================== */
 
-        // Asignar interacción a las tarjetas
-        cards.forEach(card => {
-            const handleMove = (e) => {
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                const rect = card.getBoundingClientRect();
-                const x = clientX - rect.left; const y = clientY - rect.top;
-                
-                card.style.setProperty('--mouse-x', `${x}px`); card.style.setProperty('--mouse-y', `${y}px`);
-                const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6; 
-                const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            };
-            const handleLeave = () => { card.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)'; card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`; };
-            const handleEnter = () => { card.style.transition = 'none'; };
+      // LAB 01: GEOMETRÍA — Phyllotaxis Fibonacci Spiral & Dynamic Vector Flow
+      function renderGeometria(ctx, w, h, time, opts, isInteractive) {
+        ctx.fillStyle = '#07080c';
+        ctx.fillRect(0, 0, w, h);
 
-            card.addEventListener('mouseenter', handleEnter); card.addEventListener('mousemove', handleMove); card.addEventListener('mouseleave', handleLeave);
-            card.addEventListener('touchstart', handleEnter, {passive: true}); card.addEventListener('touchmove', handleMove, {passive: true}); card.addEventListener('touchend', handleLeave);
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const maxRadius = Math.min(w, h) * 0.43;
+        const count = opts.density;
+        const radAngle = (opts.angle * Math.PI) / 180;
+        const t = time * 0.001 * opts.flowSpeed;
 
-            // Al hacer clic, cargar datos y abrir modal
-            card.addEventListener('click', () => {
-                currentCardId = card.getAttribute('data-id');
-                document.getElementById('modal-tag').innerText = `[ ${card.querySelector('.card-index').innerText} ]`;
-                document.getElementById('modal-title').innerText = card.querySelector('h3').innerText;
-                document.getElementById('modal-desc').innerText = card.querySelector('p').innerText;
-                
-                infoView.style.display = 'block';
-                demoView.style.display = 'none';
-                modal.classList.add('active');
-            });
+        // Subtle polar blueprint rings
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.07)';
+        ctx.lineWidth = 1;
+        [0.382, 0.618, 1.0].forEach((ratio) => {
+          ctx.beginPath();
+          ctx.arc(cx, cy, maxRadius * ratio, 0, Math.PI * 2);
+          ctx.stroke();
         });
 
-        // Funciones para cerrar modal y apagar demo
-        function closeModal() {
-            modal.classList.remove('active');
-            stopDemo();
-            setTimeout(() => {
-                infoView.style.display = 'block';
-                demoView.style.display = 'none';
-            }, 300);
+        // Vector offset from pointer in modal
+        const px = isInteractive ? (opts.pointerX - 0.5) * 45 : 0;
+        const py = isInteractive ? (opts.pointerY - 0.5) * 45 : 0;
+
+        for (let i = 1; i <= count; i++) {
+          const frac = i / count;
+          const rBase = Math.sqrt(frac) * maxRadius;
+          const theta = i * radAngle + t * 0.25;
+          const flowWave = Math.sin(frac * 10 - t * 2.1) * (maxRadius * 0.032);
+          const r = rBase + flowWave;
+
+          const x = cx + Math.cos(theta) * r + px * frac * 0.45;
+          const y = cy + Math.sin(theta) * r + py * frac * 0.45;
+
+          const size = (1.1 + (1 - frac) * 2.1) * (w < 380 ? 0.85 : 1);
+          const isFibonacci = (i % 13 === 0 || i % 21 === 0);
+
+          ctx.beginPath();
+          ctx.arc(x, y, size, 0, Math.PI * 2);
+          if (isFibonacci) {
+            ctx.fillStyle = `rgba(100, 181, 246, ${0.45 + (1 - frac) * 0.5})`;
+          } else {
+            ctx.fillStyle = `rgba(212, 175, 55, ${0.22 + (1 - frac) * 0.72})`;
+          }
+          ctx.fill();
+
+          // Connect delicate golden spiral arms for high-craft look
+          if (i > 21 && i % 2 === 0 && i < count - 5) {
+            const prevIdx = i - 21;
+            const pFrac = prevIdx / count;
+            const pR = Math.sqrt(pFrac) * maxRadius + Math.sin(pFrac * 10 - t * 2.1) * (maxRadius * 0.032);
+            const pTheta = prevIdx * radAngle + t * 0.25;
+            const x2 = cx + Math.cos(pTheta) * pR + px * pFrac * 0.45;
+            const y2 = cy + Math.sin(pTheta) * pR + py * pFrac * 0.45;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = `rgba(232, 201, 122, ${0.065 * (1 - frac * 0.4)})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
         }
-        document.getElementById('close-modal').addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-        document.getElementById('stop-demo-btn').addEventListener('click', () => {
-            stopDemo();
-            demoView.style.display = 'none';
-            infoView.style.display = 'block';
+      }
+
+      // LAB 02: SINESTESIA — Chladni Standing Wave & Lissajous Harmonic Interference
+      function renderSinestesia(ctx, w, h, time, opts, isInteractive) {
+        ctx.fillStyle = '#07080c';
+        ctx.fillRect(0, 0, w, h);
+
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const radius = Math.min(w, h) * 0.41;
+        const m = opts.m;
+        const n = opts.n;
+        const freqFactor = opts.baseFreq / 432;
+        const t = time * 0.0012 * freqFactor;
+
+        // Acoustic plate frame
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.16)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius * 1.04, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Chladni Nodal Field (sampled grid inside circular plate)
+        const step = isInteractive ? Math.max(8, Math.floor(Math.min(w, h) / 48)) : 9;
+        for (let gx = -radius; gx <= radius; gx += step) {
+          for (let gy = -radius; gy <= radius; gy += step) {
+            const dist = Math.hypot(gx, gy);
+            if (dist > radius) continue;
+            const nx = gx / radius;
+            const ny = gy / radius;
+            // Chladni plate equation: cos(n*pi*x)*cos(m*pi*y) - cos(m*pi*x)*cos(n*pi*y)
+            const val =
+              Math.cos(n * Math.PI * nx + Math.sin(t * 0.5) * 0.25) *
+              Math.cos(m * Math.PI * ny) -
+              Math.cos(m * Math.PI * nx) *
+              Math.cos(n * Math.PI * ny + Math.cos(t * 0.5) * 0.25);
+
+            const nodalIntensity = 1 - Math.min(1, Math.abs(val) * 3.8);
+            if (nodalIntensity > 0.15) {
+              const pulseBoost = opts.playing ? 1.25 : 1.0;
+              ctx.beginPath();
+              ctx.arc(cx + gx, cy + gy, (0.9 + nodalIntensity * 1.5) * pulseBoost, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(232, 201, 122, ${nodalIntensity * 0.78})`;
+              ctx.fill();
+            }
+          }
+        }
+
+        // Superimposed Lissajous Harmonic Curve (Cyan Precision Vector)
+        ctx.beginPath();
+        const samples = 260;
+        for (let i = 0; i <= samples; i++) {
+          const a = (i / samples) * Math.PI * 2;
+          const x = cx + Math.sin(m * a + t) * radius * 0.78;
+          const y = cy + Math.sin(n * a) * radius * 0.78;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = opts.playing ? 'rgba(100, 181, 246, 0.72)' : 'rgba(100, 181, 246, 0.36)';
+        ctx.lineWidth = opts.playing ? 1.6 : 1.1;
+        ctx.stroke();
+      }
+
+      // LAB 03: ESPACIO — 3D Rotating Harmonic Torus Topography
+      function renderEspacio(ctx, w, h, time, opts, isInteractive) {
+        ctx.fillStyle = '#07080c';
+        ctx.fillRect(0, 0, w, h);
+
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const minDim = Math.min(w, h);
+        const R = minDim * 0.27;
+        const rBase = R * 0.48;
+        const res = isInteractive ? opts.resolution : 18;
+        const t = time * 0.001;
+
+        const rotY = isInteractive ? opts.rotY + (opts.dragging ? 0 : t * 0.25) : t * 0.45;
+        const rotX = isInteractive ? opts.rotX : 0.65 + Math.sin(t * 0.5) * 0.2;
+        const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+        const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+        const fov = minDim * 1.4;
+
+        const project = (x, y, z) => {
+          const x1 = x * cosY - z * sinY;
+          const z1 = x * sinY + z * cosY;
+          const y2 = y * cosX - z1 * sinX;
+          const z2 = y * sinX + z1 * cosX;
+          const scale = fov / (fov + z2 + R * 1.3);
+          return { x: cx + x1 * scale, y: cy + y2 * scale, z: z2, scale };
+        };
+
+        // Rings along u
+        const uSteps = res;
+        const vSteps = Math.max(12, Math.floor(res * 0.65));
+
+        for (let i = 0; i < uSteps; i++) {
+          const u = (i / uSteps) * Math.PI * 2;
+          ctx.beginPath();
+          for (let j = 0; j <= vSteps; j++) {
+            const v = (j / vSteps) * Math.PI * 2 + u * (opts.torsion * 0.25);
+            const harmonic = Math.sin(u * 4 + v * 2 - t * 2.2) * (rBase * opts.amplitude);
+            const r = rBase + harmonic;
+            const x = (R + r * Math.cos(v)) * Math.cos(u);
+            const y = (R + r * Math.cos(v)) * Math.sin(u);
+            const z = r * Math.sin(v);
+            const p = project(x, y, z);
+            if (j === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.strokeStyle = i % 2 === 0 ? 'rgba(212, 175, 55, 0.34)' : 'rgba(100, 181, 246, 0.18)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        // Longitudinal energy flow lines
+        for (let j = 0; j < vSteps; j += 2) {
+          const v0 = (j / vSteps) * Math.PI * 2;
+          ctx.beginPath();
+          for (let i = 0; i <= uSteps; i++) {
+            const u = (i / uSteps) * Math.PI * 2;
+            const v = v0 + u * (opts.torsion * 0.25);
+            const harmonic = Math.sin(u * 4 + v * 2 - t * 2.2) * (rBase * opts.amplitude);
+            const r = rBase + harmonic;
+            const x = (R + r * Math.cos(v)) * Math.cos(u);
+            const y = (R + r * Math.cos(v)) * Math.sin(u);
+            const z = r * Math.sin(v);
+            const p = project(x, y, z);
+            if (i === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.strokeStyle = 'rgba(232, 201, 122, 0.15)';
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+
+      /* ======================================================================
+         6. HARMONIC SERIES INSTRUMENT (CONTRAPUNTO SECTION)
+         ====================================================================== */
+      const HARMONIC_NOTES = [
+        { name: 'Fundamental', interval: 'Unísono', ratio: '1:1', mult: 1, freq: 216.0, note: 'A3' },
+        { name: '3ª Mayor', interval: 'Tercera Justa', ratio: '5:4', mult: 1.25, freq: 270.0, note: 'C♯4' },
+        { name: '4ª Justa', interval: 'Cuarta Pitagórica', ratio: '4:3', mult: 4 / 3, freq: 288.0, note: 'D4' },
+        { name: '5ª Justa', interval: 'Quinta Armónica', ratio: '3:2', mult: 1.5, freq: 324.0, note: 'E4' },
+        { name: '6ª Mayor', interval: 'Sexta Natural', ratio: '5:3', mult: 5 / 3, freq: 360.0, note: 'F♯4' },
+        { name: 'Octava', interval: 'Diapasón 432', ratio: '2:1', mult: 2, freq: 432.0, note: 'A4' },
+        { name: 'Octava Alta', interval: 'Armónico 4º', ratio: '4:1', mult: 4, freq: 864.0, note: 'A5' },
+      ];
+
+      function initHarmonicInstrument() {
+        const grid = document.getElementById('harmonic-nodes-grid');
+        const activeName = document.getElementById('harmonic-active-name');
+        const activeSpecs = document.getElementById('harmonic-active-specs');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+        HARMONIC_NOTES.forEach((item) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className =
+            'relative overflow-hidden flex flex-col items-center justify-center py-4 px-2 rounded-xl border border-white/10 bg-white/[0.025] hover:border-gold/60 hover:bg-gold/10 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-gold/50';
+          btn.innerHTML = `
+            <span class="font-mono text-[10px] text-blueprint-cyan/90">${item.ratio}</span>
+            <span class="font-serif text-xl sm:text-2xl text-slate-100 group-hover:text-gold-light mt-1">${item.note}</span>
+            <span class="font-mono text-[9px] text-slate-400 mt-1">${Math.round(item.freq)} Hz</span>
+            <span class="text-[10px] text-slate-500 mt-0.5 truncate max-w-full">${item.name}</span>
+          `;
+
+          btn.addEventListener('click', () => {
+            if (!state.soundEnabled) setSoundEnabled(true);
+            playHarmonicTone(item.freq, 2.6, 0.2);
+            activeName.textContent = `${item.interval} · ${item.note}`;
+            activeSpecs.textContent = `RATIO ${item.ratio} · ${item.freq.toFixed(1)} Hz`;
+
+            state.harmonicWave.freqRatio = item.mult;
+            state.harmonicWave.energy = 1.0;
+
+            // Golden Ripple visual feedback
+            const ripple = document.createElement('span');
+            ripple.className = 'pointer-events-none absolute inset-0 rounded-xl border border-gold-light node-ripple';
+            btn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 950);
+          });
+
+          grid.appendChild(btn);
         });
 
-        // --- 3. MOTORES GRÁFICOS AISLADOS (DEMOS CON SLIDERS) ---
-        document.getElementById('start-demo-btn').addEventListener('click', () => {
-            infoView.style.display = 'none';
-            demoView.style.display = 'flex';
-            
-            const container = demoCanvas.parentElement;
-            demoCanvas.width = container.clientWidth;
-            demoCanvas.height = container.clientHeight;
-            
-            // Reset de Sliders al iniciar
-            param1 = 50; param2 = 50;
-            slider1.value = 50; slider2.value = 50;
+        // "Tocar Acorde" button (Arpeggiated Just Intonation resonance)
+        const chordBtn = document.getElementById('play-chord-btn');
+        if (chordBtn) {
+          chordBtn.addEventListener('click', () => {
+            if (!state.soundEnabled) setSoundEnabled(true);
+            const indices = [0, 1, 3, 5, 6];
+            indices.forEach((idx, i) => {
+              setTimeout(() => {
+                const n = HARMONIC_NOTES[idx];
+                playHarmonicTone(n.freq, 3.2, 0.14);
+                activeName.textContent = `Acorde Armónico · ${n.note}`;
+                activeSpecs.textContent = `RATIO ${n.ratio} · ${n.freq.toFixed(1)} Hz`;
+                state.harmonicWave.freqRatio = n.mult;
+                state.harmonicWave.energy = 0.95;
+                const nodeBtn = grid.children[idx];
+                if (nodeBtn) {
+                  const ripple = document.createElement('span');
+                  ripple.className = 'pointer-events-none absolute inset-0 rounded-xl border border-gold-light node-ripple';
+                  nodeBtn.appendChild(ripple);
+                  setTimeout(() => ripple.remove(), 950);
+                }
+              }, i * 140);
+            });
+          });
+        }
+      }
 
-            startDemo(currentCardId);
+      const harmonicWaveCanvas = document.getElementById('harmonic-wave-canvas');
+      function drawHarmonicWave(time) {
+        const { width: w, height: h, ctx } = resizeCanvasToDisplaySize(harmonicWaveCanvas);
+        if (!w || !h) return;
+
+        ctx.clearRect(0, 0, w, h);
+        state.harmonicWave.energy = Math.max(0.1, state.harmonicWave.energy * 0.975);
+
+        const midY = h * 0.5;
+        const amp = (h * 0.36) * state.harmonicWave.energy;
+        const t = time * 0.004;
+
+        // Center axis
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, midY);
+        ctx.lineTo(w, midY);
+        ctx.stroke();
+
+        // Fundamental Reference Wave (Cyan)
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 3) {
+          const norm = x / w;
+          const env = Math.sin(norm * Math.PI);
+          const y = midY + Math.sin(norm * Math.PI * 4 + t) * amp * 0.55 * env;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(100, 181, 246, 0.35)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Active Harmonic Ratio Wave (Gold)
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 2) {
+          const norm = x / w;
+          const env = Math.sin(norm * Math.PI);
+          const y =
+            midY +
+            Math.sin(norm * Math.PI * 4 * state.harmonicWave.freqRatio + t * 1.4) * amp * env;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = '#e8c97a';
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+      }
+
+      /* ======================================================================
+         7. INTERACTIVE LABORATORY MODAL LOGIC
+         ====================================================================== */
+      const modal = document.getElementById('lab-modal');
+      const modalTag = document.getElementById('modal-tag');
+      const modalTitle = document.getElementById('modal-title');
+      const modalDesc = document.getElementById('modal-description');
+      const controlsContainer = document.getElementById('lab-controls-container');
+      const telemetryLeft = document.getElementById('telemetry-left');
+      const telemetryRight = document.getElementById('telemetry-right');
+      const labHint = document.getElementById('lab-hint');
+      const labCanvas = document.getElementById('lab-main-canvas');
+
+      const LAB_META = {
+        geometria: {
+          tag: '01 // GEOMETRÍA',
+          title: 'Semilla Áurea & Flujo',
+          desc: 'Ajusta el ángulo de divergencia alrededor de 137.508° (ángulo áureo = 360° / Φ²) para observar cómo emergen espirales de Fibonacci perfectas en la naturaleza.',
+          hint: 'Mueve el cursor o desliza el dedo para modular el campo vectorial',
+        },
+        sinestesia: {
+          tag: '02 // SINESTESIA',
+          title: 'Cymatics & Frecuencias',
+          desc: 'Simulación de patrones nodales de Chladni y curvas de Lissajous acopladas a síntesis de audio real. Explora las razones armónicas y la afinación natural.',
+          hint: 'Activa la resonancia sonora para escuchar la relación armónica m:n',
+        },
+        espacio: {
+          tag: '03 // ESPACIO',
+          title: 'Topografía del Toroide',
+          desc: 'Superficie toroidal paramétrica con torsión helicoidal y ondas estacionarias radiales. Arrastra directamente sobre la malla para rotar la perspectiva 3D.',
+          hint: 'Arrastra con ratón o tacto para rotar el campo toroidal en 3D',
+        },
+      };
+
+      function updateSynthButtonUI() {
+        const btn = document.getElementById('syn-toggle-btn');
+        if (!btn) return;
+        if (state.syn.playing) {
+          btn.textContent = 'Detener Resonancia Sonora';
+          btn.classList.add('bg-gold', 'text-obsidian', 'border-gold');
+          btn.classList.remove('bg-gold/10', 'text-gold-light', 'border-gold/45');
+        } else {
+          btn.textContent = 'Activar Resonancia Sonora';
+          btn.classList.remove('bg-gold', 'text-obsidian', 'border-gold');
+          btn.classList.add('bg-gold/10', 'text-gold-light', 'border-gold/45');
+        }
+      }
+
+      function buildLabControls(labId) {
+        controlsContainer.innerHTML = '';
+
+        if (labId === 'geometria') {
+          controlsContainer.innerHTML = `
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="geo-angle" class="font-mono text-xs text-slate-300">Ángulo de Divergencia</label>
+                <span id="geo-angle-val" class="font-mono text-xs text-gold-light">${state.geo.angle.toFixed(3)}°</span>
+              </div>
+              <input id="geo-angle" type="range" min="130" max="145" step="0.004" value="${state.geo.angle}" class="precision-slider" />
+              <div class="mt-2 flex justify-end">
+                <button id="geo-snap-phi" type="button" class="font-mono text-[10px] text-blueprint-cyan hover:text-gold-light underline underline-offset-4 cursor-pointer">
+                  Restaurar Ángulo Áureo (137.508°)
+                </button>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="geo-density" class="font-mono text-xs text-slate-300">Densidad Áurea</label>
+                <span id="geo-density-val" class="font-mono text-xs text-gold-light">${state.geo.density} nodos</span>
+              </div>
+              <input id="geo-density" type="range" min="120" max="650" step="10" value="${state.geo.density}" class="precision-slider" />
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="geo-speed" class="font-mono text-xs text-slate-300">Velocidad de Flujo</label>
+                <span id="geo-speed-val" class="font-mono text-xs text-gold-light">${state.geo.flowSpeed.toFixed(2)}x</span>
+              </div>
+              <input id="geo-speed" type="range" min="0" max="3" step="0.05" value="${state.geo.flowSpeed}" class="precision-slider" />
+            </div>
+          `;
+
+          const angleEl = document.getElementById('geo-angle');
+          const angleVal = document.getElementById('geo-angle-val');
+          angleEl.addEventListener('input', (e) => {
+            state.geo.angle = parseFloat(e.target.value);
+            angleVal.textContent = `${state.geo.angle.toFixed(3)}°`;
+          });
+          document.getElementById('geo-snap-phi').addEventListener('click', () => {
+            state.geo.angle = 137.508;
+            angleEl.value = 137.508;
+            angleVal.textContent = '137.508°';
+          });
+          document.getElementById('geo-density').addEventListener('input', (e) => {
+            state.geo.density = parseInt(e.target.value, 10);
+            document.getElementById('geo-density-val').textContent = `${state.geo.density} nodos`;
+          });
+          document.getElementById('geo-speed').addEventListener('input', (e) => {
+            state.geo.flowSpeed = parseFloat(e.target.value);
+            document.getElementById('geo-speed-val').textContent = `${state.geo.flowSpeed.toFixed(2)}x`;
+          });
+        }
+
+        if (labId === 'sinestesia') {
+          controlsContainer.innerHTML = `
+            <div>
+              <div class="font-mono text-xs text-slate-300 mb-2.5">Frecuencia Base (Afinación)</div>
+              <div class="grid grid-cols-3 gap-2">
+                ${[432, 440, 528].map((f) => `
+                  <button type="button" data-freq="${f}" class="syn-freq-btn py-2 rounded-lg font-mono text-xs border transition-all cursor-pointer ${
+                    state.syn.baseFreq === f
+                      ? 'border-gold bg-gold/20 text-gold-light'
+                      : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-gold/40'
+                  }">${f} Hz</button>
+                `).join('')}
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="syn-m" class="font-mono text-xs text-slate-300">Armónico Horizontal (m)</label>
+                <span id="syn-m-val" class="font-mono text-xs text-gold-light">${state.syn.m}</span>
+              </div>
+              <input id="syn-m" type="range" min="1" max="8" step="1" value="${state.syn.m}" class="precision-slider" />
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="syn-n" class="font-mono text-xs text-slate-300">Armónico Vertical (n)</label>
+                <span id="syn-n-val" class="font-mono text-xs text-gold-light">${state.syn.n}</span>
+              </div>
+              <input id="syn-n" type="range" min="1" max="8" step="1" value="${state.syn.n}" class="precision-slider" />
+            </div>
+            <div class="pt-2">
+              <button id="syn-toggle-btn" type="button" class="w-full py-3 rounded-xl border border-gold/45 bg-gold/10 text-gold-light font-mono text-xs uppercase tracking-wider transition-all cursor-pointer">
+                Activar Resonancia Sonora
+              </button>
+            </div>
+          `;
+
+          controlsContainer.querySelectorAll('.syn-freq-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              state.syn.baseFreq = parseInt(btn.dataset.freq, 10);
+              controlsContainer.querySelectorAll('.syn-freq-btn').forEach((b) => {
+                const active = parseInt(b.dataset.freq, 10) === state.syn.baseFreq;
+                b.className = `syn-freq-btn py-2 rounded-lg font-mono text-xs border transition-all cursor-pointer ${
+                  active
+                    ? 'border-gold bg-gold/20 text-gold-light'
+                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-gold/40'
+                }`;
+              });
+              updateSinestesiaSynth();
+            });
+          });
+
+          document.getElementById('syn-m').addEventListener('input', (e) => {
+            state.syn.m = parseInt(e.target.value, 10);
+            document.getElementById('syn-m-val').textContent = state.syn.m;
+            updateSinestesiaSynth();
+          });
+
+          document.getElementById('syn-n').addEventListener('input', (e) => {
+            state.syn.n = parseInt(e.target.value, 10);
+            document.getElementById('syn-n-val').textContent = state.syn.n;
+            updateSinestesiaSynth();
+          });
+
+          document.getElementById('syn-toggle-btn').addEventListener('click', () => {
+            if (state.syn.playing) {
+              stopSinestesiaSynth();
+            } else {
+              startSinestesiaSynth();
+            }
+            updateSynthButtonUI();
+          });
+          updateSynthButtonUI();
+        }
+
+        if (labId === 'espacio') {
+          controlsContainer.innerHTML = `
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="esp-torsion" class="font-mono text-xs text-slate-300">Torsión Toroidal</label>
+                <span id="esp-torsion-val" class="font-mono text-xs text-gold-light">${state.esp.torsion.toFixed(1)}</span>
+              </div>
+              <input id="esp-torsion" type="range" min="0" max="6" step="0.2" value="${state.esp.torsion}" class="precision-slider" />
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="esp-amp" class="font-mono text-xs text-slate-300">Amplitud Armónica</label>
+                <span id="esp-amp-val" class="font-mono text-xs text-gold-light">${Math.round(state.esp.amplitude * 100)}%</span>
+              </div>
+              <input id="esp-amp" type="range" min="0" max="0.55" step="0.01" value="${state.esp.amplitude}" class="precision-slider" />
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="esp-res" class="font-mono text-xs text-slate-300">Resolución de Malla</label>
+                <span id="esp-res-val" class="font-mono text-xs text-gold-light">${state.esp.resolution} anillos</span>
+              </div>
+              <input id="esp-res" type="range" min="14" max="48" step="2" value="${state.esp.resolution}" class="precision-slider" />
+            </div>
+          `;
+
+          document.getElementById('esp-torsion').addEventListener('input', (e) => {
+            state.esp.torsion = parseFloat(e.target.value);
+            document.getElementById('esp-torsion-val').textContent = state.esp.torsion.toFixed(1);
+          });
+          document.getElementById('esp-amp').addEventListener('input', (e) => {
+            state.esp.amplitude = parseFloat(e.target.value);
+            document.getElementById('esp-amp-val').textContent = `${Math.round(state.esp.amplitude * 100)}%`;
+          });
+          document.getElementById('esp-res').addEventListener('input', (e) => {
+            state.esp.resolution = parseInt(e.target.value, 10);
+            document.getElementById('esp-res-val').textContent = `${state.esp.resolution} anillos`;
+          });
+        }
+      }
+
+      function openLabModal(labId) {
+        const meta = LAB_META[labId];
+        if (!meta) return;
+        state.activeLab = labId;
+        modalTag.textContent = meta.tag;
+        modalTitle.textContent = meta.title;
+        modalDesc.textContent = meta.desc;
+        labHint.textContent = meta.hint;
+        buildLabControls(labId);
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        // Subtle harmonic chime on lab entry
+        if (state.soundEnabled) {
+          const entryFreqs = { geometria: 324, sinestesia: 432, espacio: 288 };
+          playHarmonicTone(entryFreqs[labId] || 432, 1.4, 0.09);
+        }
+      }
+
+      function closeLabModal() {
+        stopSinestesiaSynth();
+        state.activeLab = null;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+
+      // Lab Canvas Pointer & Touch Interactions
+      function getCanvasRelativePos(canvas, clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          nx: (clientX - rect.left) / Math.max(1, rect.width),
+          ny: (clientY - rect.top) / Math.max(1, rect.height),
+        };
+      }
+
+      labCanvas.addEventListener('mousedown', (e) => {
+        if (state.activeLab === 'espacio') {
+          state.esp.dragging = true;
+          state.esp.lastX = e.clientX;
+          state.esp.lastY = e.clientY;
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        state.esp.dragging = false;
+      });
+
+      labCanvas.addEventListener('mousemove', (e) => {
+        if (state.activeLab === 'geometria') {
+          const pos = getCanvasRelativePos(labCanvas, e.clientX, e.clientY);
+          state.geo.pointerX = pos.nx;
+          state.geo.pointerY = pos.ny;
+        } else if (state.activeLab === 'espacio' && state.esp.dragging) {
+          const dx = e.clientX - state.esp.lastX;
+          const dy = e.clientY - state.esp.lastY;
+          state.esp.rotY += dx * 0.008;
+          state.esp.rotX += dy * 0.008;
+          state.esp.lastX = e.clientX;
+          state.esp.lastY = e.clientY;
+        }
+      });
+
+      labCanvas.addEventListener('touchstart', (e) => {
+        if (!e.touches || !e.touches[0]) return;
+        const touch = e.touches[0];
+        if (state.activeLab === 'espacio') {
+          state.esp.dragging = true;
+          state.esp.lastX = touch.clientX;
+          state.esp.lastY = touch.clientY;
+        } else if (state.activeLab === 'geometria') {
+          const pos = getCanvasRelativePos(labCanvas, touch.clientX, touch.clientY);
+          state.geo.pointerX = pos.nx;
+          state.geo.pointerY = pos.ny;
+        }
+      }, { passive: true });
+
+      labCanvas.addEventListener('touchmove', (e) => {
+        if (!e.touches || !e.touches[0]) return;
+        const touch = e.touches[0];
+        if (state.activeLab === 'espacio' && state.esp.dragging) {
+          e.preventDefault();
+          const dx = touch.clientX - state.esp.lastX;
+          const dy = touch.clientY - state.esp.lastY;
+          state.esp.rotY += dx * 0.01;
+          state.esp.rotX += dy * 0.01;
+          state.esp.lastX = touch.clientX;
+          state.esp.lastY = touch.clientY;
+        } else if (state.activeLab === 'geometria') {
+          e.preventDefault();
+          const pos = getCanvasRelativePos(labCanvas, touch.clientX, touch.clientY);
+          state.geo.pointerX = pos.nx;
+          state.geo.pointerY = pos.ny;
+        }
+      }, { passive: false });
+
+      labCanvas.addEventListener('touchend', () => {
+        state.esp.dragging = false;
+      });
+
+      /* ======================================================================
+         8. UI EVENTS (HEADER, CARDS, MODAL, CLIPBOARD)
+         ====================================================================== */
+      function bindUIEvents() {
+        // Sound Toggle
+        document.getElementById('sound-toggle-btn').addEventListener('click', () => {
+          setSoundEnabled(!state.soundEnabled);
+          if (state.soundEnabled) {
+            playHarmonicTone(432, 0.9, 0.1);
+          }
         });
 
-        function stopDemo() {
-            if(demoAnimationReq) cancelAnimationFrame(demoAnimationReq);
-            demoCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
-        }
+        // Hero "Escuchar Armonía" CTA
+        document.getElementById('hero-harmony-btn').addEventListener('click', playEtherealChord);
 
-        function startDemo(id) {
-            stopDemo();
-            demoTime = 0;
-            
-            if(id === "1") {
-                lbl1.innerText = "VELOCIDAD DE ROTACIÓN";
-                lbl2.innerText = "NIVEL DE DISPERSIÓN";
-                animateDemo1(); 
+        // Mobile Menu Drawer
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const drawer = document.getElementById('mobile-drawer');
+        const openIcon = document.getElementById('menu-open-icon');
+        const closeIcon = document.getElementById('menu-close-icon');
+
+        const toggleDrawer = (forceClose = false) => {
+          const isOpen = !drawer.classList.contains('hidden');
+          const shouldClose = forceClose || isOpen;
+          drawer.classList.toggle('hidden', shouldClose);
+          openIcon.classList.toggle('hidden', !shouldClose);
+          closeIcon.classList.toggle('hidden', shouldClose);
+          menuBtn.setAttribute('aria-expanded', String(!shouldClose));
+        };
+
+        menuBtn.addEventListener('click', () => toggleDrawer(false));
+        document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+          link.addEventListener('click', () => toggleDrawer(true));
+        });
+
+        // Exhibition Cards
+        document.querySelectorAll('.lab-card').forEach((card) => {
+          const open = () => openLabModal(card.dataset.lab);
+          card.addEventListener('click', open);
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              open();
             }
-            else if(id === "2") {
-                lbl1.innerText = "VELOCIDAD DE ONDA";
-                lbl2.innerText = "AMPLITUD DE FRECUENCIA";
-                animateDemo2(); 
+          });
+        });
+
+        // Modal Close
+        document.getElementById('close-modal-btn').addEventListener('click', closeLabModal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeLabModal();
+        });
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && state.activeLab) {
+            closeLabModal();
+          }
+        });
+
+        // Safe Clipboard Copy (execCommand fallback for iframe environments)
+        const copyBtn = document.getElementById('copy-email-btn');
+        const copyToast = document.getElementById('copy-toast');
+        copyBtn.addEventListener('click', () => {
+          const email = 'pbazan@gmail.com';
+          try {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = email;
+            tempInput.style.position = 'fixed';
+            tempInput.style.opacity = '0';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+          } catch (err) {
+            console.warn('Copia directa no soportada:', err);
+          }
+          copyToast.classList.remove('opacity-0');
+          copyToast.classList.add('opacity-100');
+          setTimeout(() => {
+            copyToast.classList.remove('opacity-100');
+            copyToast.classList.add('opacity-0');
+          }, 3200);
+        });
+      }
+
+      /* ======================================================================
+         9. MASTER ANIMATION LOOP (FPS-AWARE & PERFORMANCE FRIENDLY)
+         ====================================================================== */
+      const previewGeoCanvas = document.getElementById('preview-geometria');
+      const previewSynCanvas = document.getElementById('preview-sinestesia');
+      const previewEspCanvas = document.getElementById('preview-espacio');
+
+      let lastFrameTime = performance.now();
+      let fpsSmooth = 60;
+
+      function animate(now) {
+        const dt = Math.max(1, now - lastFrameTime);
+        lastFrameTime = now;
+        fpsSmooth = fpsSmooth * 0.92 + (1000 / dt) * 0.08;
+
+        if (state.activeLab) {
+          // Render Active Fullscreen Laboratory
+          const { width, height, ctx } = resizeCanvasToDisplaySize(labCanvas);
+          if (width && height) {
+            if (state.activeLab === 'geometria') {
+              renderGeometria(ctx, width, height, now, state.geo, true);
+              telemetryLeft.textContent = `θ = ${state.geo.angle.toFixed(3)}° · Φ = 1.618 · N = ${state.geo.density}`;
+            } else if (state.activeLab === 'sinestesia') {
+              renderSinestesia(ctx, width, height, now, state.syn, true);
+              telemetryLeft.textContent = `BASE ${state.syn.baseFreq} Hz · RAZÓN ${state.syn.m}:${state.syn.n} · ${state.syn.playing ? 'SYNTH ON' : 'STANDBY'}`;
+            } else if (state.activeLab === 'espacio') {
+              renderEspacio(ctx, width, height, now, state.esp, true);
+              telemetryLeft.textContent = `TORSIÓN ${state.esp.torsion.toFixed(1)} · MALLA ${state.esp.resolution}×${Math.floor(state.esp.resolution * 0.65)}`;
             }
-            else if(id === "3") {
-                lbl1.innerText = "VELOCIDAD ISOMÉTRICA";
-                lbl2.innerText = "ESCALA DEL OBJETO (ZOOM)";
-                animateDemo3(); 
-            }
+            telemetryRight.textContent = `${Math.round(fpsSmooth)} FPS`;
+          }
+        } else {
+          // Render Page Canvases
+          drawHero(now);
+
+          const p1 = resizeCanvasToDisplaySize(previewGeoCanvas);
+          if (p1.width && p1.height) {
+            renderGeometria(p1.ctx, p1.width, p1.height, now, { angle: GOLDEN_ANGLE, density: 190, flowSpeed: 0.7 }, false);
+          }
+
+          const p2 = resizeCanvasToDisplaySize(previewSynCanvas);
+          if (p2.width && p2.height) {
+            renderSinestesia(p2.ctx, p2.width, p2.height, now, { baseFreq: 432, m: 3, n: 2, playing: false }, false);
+          }
+
+          const p3 = resizeCanvasToDisplaySize(previewEspCanvas);
+          if (p3.width && p3.height) {
+            renderEspacio(p3.ctx, p3.width, p3.height, now, { torsion: 2.0, amplitude: 0.22, resolution: 18 }, false);
+          }
+
+          drawHarmonicWave(now);
         }
 
-        // Demo 1: Enjambre geométrico giratorio
-        function animateDemo1() {
-            // param1 controla la velocidad (0.005 a 0.05)
-            const speed = 0.005 + (param1 / 100) * 0.045;
-            demoTime += speed;
-            
-            demoCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            demoCtx.fillRect(0, 0, demoCanvas.width, demoCanvas.height);
-            
-            const cx = demoCanvas.width / 2; const cy = demoCanvas.height / 2;
-            // param2 controla la dispersión/radio (0 a 40)
-            const dispersion = (param2 / 100) * 40;
-            
-            for(let i=0; i<60; i++) {
-                const angle = i * 0.5 + demoTime;
-                const radius = 20 + i * 1.5 + Math.sin(demoTime * 2 + i) * dispersion;
-                const x = cx + Math.cos(angle) * radius;
-                const y = cy + Math.sin(angle) * radius;
-                
-                demoCtx.fillStyle = `hsl(${180 + i * 2}, 100%, 50%)`;
-                demoCtx.beginPath(); demoCtx.arc(x, y, 2, 0, Math.PI*2); demoCtx.fill();
-                
-                if(i > 0) {
-                    const prevAngle = (i-1) * 0.5 + demoTime;
-                    const prevRadius = 20 + (i-1) * 1.5 + Math.sin(demoTime * 2 + (i-1)) * dispersion;
-                    demoCtx.strokeStyle = 'rgba(0, 243, 255, 0.2)';
-                    demoCtx.beginPath();
-                    demoCtx.moveTo(cx + Math.cos(prevAngle)*prevRadius, cy + Math.sin(prevAngle)*prevRadius);
-                    demoCtx.lineTo(x, y);
-                    demoCtx.stroke();
-                }
-            }
-            demoAnimationReq = requestAnimationFrame(animateDemo1);
-        }
+        requestAnimationFrame(animate);
+      }
 
-        // Demo 2: Ondas de Frecuencia
-        function animateDemo2() {
-            // param1 controla la velocidad general de la onda
-            const speedMult = (param1 / 50); 
-            demoTime += 0.05 * speedMult;
-            
-            demoCtx.fillStyle = '#000';
-            demoCtx.fillRect(0, 0, demoCanvas.width, demoCanvas.height);
-            
-            const cy = demoCanvas.height / 2;
-            // param2 controla la amplitud global (multiplicador de 0.1 a 2.0)
-            const ampMult = 0.1 + (param2 / 100) * 1.9;
-
-            const waves = [
-                { color: '#ff00c1', amp: 40 * ampMult, freq: 0.02, speed: 2 },
-                { color: '#00f3ff', amp: 60 * ampMult, freq: 0.01, speed: -1.5 },
-                { color: '#ffffff', amp: 20 * ampMult, freq: 0.05, speed: 3 }
-            ];
-
-            waves.forEach(w => {
-                demoCtx.strokeStyle = w.color; demoCtx.lineWidth = 2;
-                demoCtx.beginPath();
-                for(let x=0; x<demoCanvas.width; x+=5) {
-                    const y = cy + Math.sin(x * w.freq + demoTime * w.speed) * w.amp;
-                    if(x===0) demoCtx.moveTo(x, y); else demoCtx.lineTo(x, y);
-                }
-                demoCtx.stroke();
-            });
-            demoAnimationReq = requestAnimationFrame(animateDemo2);
-        }
-
-        // Demo 3: Proyección Geométrica 3D (Cubo rotando)
-        function animateDemo3() {
-            // param1 controla la velocidad de rotación
-            const rotationSpeed = (param1 / 50);
-            demoTime += 0.02 * rotationSpeed;
-            
-            demoCtx.fillStyle = '#000';
-            demoCtx.fillRect(0, 0, demoCanvas.width, demoCanvas.height);
-            
-            const cx = demoCanvas.width / 2; const cy = demoCanvas.height / 2;
-            // param2 controla el Zoom/Tamaño del cubo (0.2 a 1.2 del espacio disponible)
-            const scaleBase = 0.2 + (param2 / 100) * 1.0;
-            const size = Math.min(cx, cy) * scaleBase;
-            
-            const vertices = [
-                [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
-                [-1,-1,1],  [1,-1,1],  [1,1,1],  [-1,1,1]
-            ];
-            const edges = [
-                [0,1],[1,2],[2,3],[3,0], [4,5],[5,6],[6,7],[7,4], [0,4],[1,5],[2,6],[3,7]
-            ];
-
-            demoCtx.strokeStyle = '#00f3ff'; demoCtx.lineWidth = 1.5;
-            
-            const projected = vertices.map(v => {
-                const cosY = Math.cos(demoTime), sinY = Math.sin(demoTime);
-                const cosX = Math.cos(demoTime*0.7), sinX = Math.sin(demoTime*0.7);
-                
-                let x = v[0]*cosY - v[2]*sinY; let z = v[0]*sinY + v[2]*cosY;
-                let y = v[1]*cosX - z*sinX; z = v[1]*sinX + z*cosX;
-                
-                const scale = 2 / (3 + z);
-                return [cx + x * size * scale, cy + y * size * scale];
-            });
-
-            edges.forEach(e => {
-                demoCtx.beginPath();
-                demoCtx.moveTo(projected[e[0]][0], projected[e[0]][1]);
-                demoCtx.lineTo(projected[e[1]][0], projected[e[1]][1]);
-                demoCtx.stroke();
-            });
-            demoAnimationReq = requestAnimationFrame(animateDemo3);
-        }
-    </script>
+      /* ======================================================================
+         10. BOOTSTRAP ON WINDOW LOAD
+         ====================================================================== */
+      window.onload = function () {
+        initHarmonicInstrument();
+        bindUIEvents();
+        requestAnimationFrame(animate);
+      };
+    })();
+  </script>
 </body>
 </html>
